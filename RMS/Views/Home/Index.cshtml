@@ -1,0 +1,66 @@
+﻿<style>
+    .box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .box:hover {
+      transform: translateY(-10px);
+      background-color: #e9ecef;
+    }
+
+    .box i {
+      font-size: 40px;
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+
+    .box h5 {
+      font-weight: 600;
+    }
+
+    .box p {
+      color: #6c757d;
+    }
+  </style>
+
+
+<div class="container mt-5">
+    <div class="row g-4">
+        <div class="col-md-12">
+         
+            <h4>Dashboard</h4>
+            <br/>
+
+
+            </div>
+    <div class="col-md-4">
+      <div class="box shadow">
+        <i class="fas fa-cogs"></i>
+        <h5>Total Branches</h5>
+                <p>@ViewBag.Branches</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="box shadow">
+        <i class="fas fa-chart-line"></i>
+        <h5>Issued Equipment</h5>
+                <p>@ViewBag.Eqpt</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="box shadow">
+        <i class="fas fa-user-friends"></i>
+      <h5>Equiptment Stored</h5>
+                <p>@ViewBag.Eqptstore</p>
+      </div>
+    </div>
+
+  
+  </div>
+</div>
