@@ -12,14 +12,23 @@
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                         <div class="mb-3">
-                            <label asp-for="name" class="form-label"></label>
+                            <label>Equipment Name</label>
                             <input asp-for="name" class="form-control" />
                             <span asp-validation-for="name" class="text-danger"></span>
                         </div>
 
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Create</button>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary" style="width:100%;">Create</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="/Eqpt" class="btn btn-success" style="width:100%;">Back</a>
+                                </div>
+                            </div>
+
+
                         </div>
                     </form>
                 </div>

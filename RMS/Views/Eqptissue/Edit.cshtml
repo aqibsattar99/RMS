@@ -1,5 +1,4 @@
-﻿@model RMS.Models.Eqptissue
-
+﻿@model RMS.Models.EqptissueVM
 
 
 <div class="container mt-4">
@@ -10,17 +9,43 @@
                     <h4 class="mb-0">Edit Equipment Issue</h4>
                 </div>
                 <div class="card-body">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+
+                       
+                    }
+                    
+
                     <form asp-action="Edit">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                         
                         <input type="hidden" asp-for="Id" />
 
+                    
+
                         <div class="mb-3">
-                            <label asp-for="date" class="form-label">Date</label>
-                            <input asp-for="date" class="form-control" />
+                            <label asp-for="date" class="form-label">Date Last Updated</label>
+                            <input asp-for="date" class="form-control" disabled="disabled" value="@Model.date?.ToString("yyyy-MM-ddTHH:mm")" />
+
                             <span asp-validation-for="date" class="text-danger"></span>
                         </div>
+
                         <div class="mb-3">
+                            <label asp-for="eqpt" class="form-label">Equipment Name</label>
+                            @Html.TextBoxFor(model => model.eqpt, new { @class = "form-control", @disabled = "disabled" })
+
+                            <span asp-validation-for="eqpt" class="text-danger"></span>
+                        </div>
+
+                          <div class="mb-3">
+                            <label asp-for="branch" class="form-label">Branch Name</label>
+                            @Html.TextBoxFor(model => model.branch, new { @class = "form-control", @disabled = "disabled" })
+
+                            <span asp-validation-for="branch" class="text-danger"></span>
+                        </div>
+
+                      @*   <div class="mb-3">
                             <label for="branchid" class="form-label">Branch</label>
                             <select class="form-control" id="branchid" name="branchid">
                                 @foreach (var B in ViewBag.Branch)
@@ -28,8 +53,9 @@
                                     <option value="@B.Id">@B.name</option>
                                 }
                             </select>
-                        </div>
+                        </div> *@
 
+@* 
                         <div class="mb-3">
                             <label for="EqptnameId" class="form-label">Equipment</label>
                             <select class="form-control" id="EqptnameId" name="eqptid">
@@ -38,7 +64,7 @@
                                     <option value="@E.Id">@E.name</option>
                                 }
                             </select>
-                        </div>
+                        </div> *@
 
                         <div class="mb-3">
                             <label asp-for="qty" class="form-label">Quantity</label>

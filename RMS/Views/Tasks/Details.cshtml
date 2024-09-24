@@ -1,0 +1,63 @@
+﻿@model RMS.Models.Tasks
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+
+<div>
+    <h4>Tasks</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.branchid)
+        </dt>
+        <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.branchid)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.eqptrepair)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.eqptrepair)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.assigned)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.assigned)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.completiondate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.completiondate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.problem)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.problem)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.status)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+</body>
+</html>

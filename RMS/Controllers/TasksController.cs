@@ -9,35 +9,22 @@ using RMS.Models;
 
 namespace RMS.Controllers
 {
-    public class EqptstoreController : Controller
+    public class TasksController : Controller
     {
         private readonly dbRMSContext _context;
 
-        public EqptstoreController(dbRMSContext context)
+        public TasksController(dbRMSContext context)
         {
             _context = context;
         }
 
-        // GET: Eqptstore
+        // GET: Tasks
         public async Task<IActionResult> Index()
         {
-            var data = await _context.Eqptstore
-               .Include(e => e.Eqptname)
-               .Where(e => e.active == true)
-               .Select(e => new EqptstoreVM
-               {
-                   Id = e.Id,
-                   date = e.date,
-                   eqptname = e.Eqptname.name,
-                   qty = e.qty,
-               })
-               .ToListAsync();
-
-            return View(data);
-           
+            return View(await _context.Tasks.Include(e => e.Branch).ToListAsync());
         }
 
-        // GET: Eqptstore/Details/5
+        // GET: Tasks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,46 +32,41 @@ namespace RMS.Controllers
                 return NotFound();
             }
 
-            var eqptstore = await _context.Eqptstore
+            var tasks = await _context.Tasks
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (eqptstore == null)
+            if (tasks == null)
             {
                 return NotFound();
             }
 
-            return View(eqptstore);
+            return View(tasks);
         }
 
-        // GET: Eqptstore/Create
+        // GET: Tasks/Create
         public IActionResult Create()
         {
-            ViewBag.Eqpt = _context.Eqptname.Where(x => x.active == true).ToList();
-
+            ViewBag.Branch = _context.Branch.Where(x => x.active == true).ToList();
             return View();
         }
 
-        // POST: Eqptstore/Create
+        // POST: Tasks/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,date,eqptid,qty,active")] Eqptstore eqptstore)
+        public async Task<IActionResult> Create([Bind("Id,branchid,eqptrepair,assigned,completiondate,problem,status")] Tasks tasks)
         {
             if (ModelState.IsValid)
             {
-                eqptstore.active = true;
-                _context.Add(eqptstore);
+                tasks.status = false;
+                _context.Add(tasks);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(eqptstore);
+            return View(tasks);
         }
 
-        // GET: Eqptstore/Edit/5
-   
-
-
-        // GET: Eqptstore/Edit/5
+        // GET: Tasks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,41 +74,23 @@ namespace RMS.Controllers
                 return NotFound();
             }
 
-            // Include the related Eqptname entity
-            var eqptstore = await _context.Eqptstore
-                                          .Include(e => e.Eqptname)
-                                          .FirstOrDefaultAsync(m => m.Id == id);
+            var tasks = await _context.Tasks.Include(e => e.Branch).Where(x => x.Id == id).FirstOrDefaultAsync();
 
-            if (eqptstore == null)
+            if (tasks == null)
             {
                 return NotFound();
             }
-
-            // Map the entity to the ViewModel
-            var eqptstoreVM = new EqptstoreVM
-            {
-                Id = eqptstore.Id,
-                date = eqptstore.updatedon,
-                eqptname = eqptstore.Eqptname?.name, // Assuming Eqptname has a property 'Name'
-                qty = eqptstore.qty
-            };
-
-            return View(eqptstoreVM);
+            return View(tasks);
         }
 
-
-
-
-
-        // POST: Eqptstore/Edit/5
+        // POST: Tasks/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,qty")] Eqptstore eqptstore)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,branch,eqptrepair,assigned,completiondate,problem,status")] Tasks tasks)
         {
-            if (id != eqptstore.Id)
+            if (id != tasks.Id)
             {
                 return NotFound();
             }
@@ -136,23 +100,26 @@ namespace RMS.Controllers
                 try
                 {
                     // Retrieve the existing entity from the database
-                    var existingEqptstore = await _context.Eqptstore.FindAsync(id);
-                    if (existingEqptstore == null)
+                    var existingTask = await _context.Tasks.FindAsync(id);
+                    if (existingTask == null)
                     {
                         return NotFound();
                     }
 
-                    // Update only the fields you want to change
-                    existingEqptstore.qty = eqptstore.qty;
-                    existingEqptstore.updatedon = DateTime.Now;
-                    existingEqptstore.active = true;
+                    // Update only the fields that are included in the bind attribute
 
-                    // Save the changes to the database
+                    existingTask.eqptrepair = tasks.eqptrepair;
+                    existingTask.assigned = tasks.assigned;
+                    existingTask.completiondate = tasks.completiondate;
+                    existingTask.problem = tasks.problem;
+                    existingTask.status = tasks.status;
+
+                    // Save the changes
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EqptstoreExists(eqptstore.Id))
+                    if (_context.Tasks.Any(e => e.Id == id))
                     {
                         return NotFound();
                     }
@@ -163,9 +130,10 @@ namespace RMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(eqptstore);
+            return View(tasks);
         }
 
+  
 
 
 
@@ -174,12 +142,7 @@ namespace RMS.Controllers
 
 
 
-
-
-
-
-
-        // GET: Eqptstore/Delete/5
+        // GET: Tasks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -187,34 +150,34 @@ namespace RMS.Controllers
                 return NotFound();
             }
 
-            var eqptstore = await _context.Eqptstore
+            var tasks = await _context.Tasks
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (eqptstore == null)
+            if (tasks == null)
             {
                 return NotFound();
             }
 
-            return View(eqptstore);
+            return View(tasks);
         }
 
-        // POST: Eqptstore/Delete/5
+        // POST: Tasks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var eqptstore = await _context.Eqptstore.FindAsync(id);
-            if (eqptstore != null)
+            var tasks = await _context.Tasks.FindAsync(id);
+            if (tasks != null)
             {
-                _context.Eqptstore.Remove(eqptstore);
+                _context.Tasks.Remove(tasks);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EqptstoreExists(int id)
+        private bool TasksExists(int id)
         {
-            return _context.Eqptstore.Any(e => e.Id == id);
+            return _context.Tasks.Any(e => e.Id == id);
         }
     }
 }

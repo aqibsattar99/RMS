@@ -1,0 +1,70 @@
+﻿@model RMS.Models.Tasks
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit Task</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="branchid" class="form-label">Branch</label>
+                            @Html.TextBoxFor(model => model.Branch.name, new { @class = "form-control", @disabled = "disabled" })
+                            <span asp-validation-for="branchid" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="eqptrepair" class="form-label">Equipment Repair</label>
+                            <input asp-for="eqptrepair" class="form-control" />
+                            <span asp-validation-for="eqptrepair" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="assigned" class="form-label">Assigned</label>
+                            <input asp-for="assigned" class="form-control" />
+                            <span asp-validation-for="assigned" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="completiondate" class="form-label">Completion Date</label>
+                            <input asp-for="completiondate" class="form-control" />
+                            <span asp-validation-for="completiondate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="problem" class="form-label">Problem</label>
+                            <input asp-for="problem" class="form-control" />
+                            <span asp-validation-for="problem" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="status" class="form-label">Status</label>
+                            <select name="status" class="form-control">
+                                <option value="false">Pending</option>
+                                <option value="true">Completed</option>
+                            </select>
+  
+                        </div>
+
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

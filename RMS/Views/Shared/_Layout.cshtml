@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RMS.styles.css" asp-append-version="true" />
+
+    @* Datatables CSS & JS *@
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+  
+   
+
 </head>
 <body>
     <header>
@@ -31,8 +37,12 @@
                           <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="EqptIssue" asp-action="Index">Eqpt Issue</a>
                         </li>
+
                              <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Eqptstore" asp-action="Index">Eqpt Store</a>
+                        </li>
+                           <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="tasks" asp-action="Index">Branch Tasks</a>
                         </li>
 
 
@@ -49,12 +59,28 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - RMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - RMS - IT BR
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+  
+   
+    <script>
+
+        $(document).ready(function () {
+            $('#tblbranch').DataTable(); // Initialize DataTable after everything is loaded
+            $('#tbleqptstore').DataTable(); // Initialize DataTable after everything is loaded
+            $('#tbleqptissue').DataTable(); // Initialize DataTable after everything is loaded
+            $('#tbleqpt').DataTable(); // Initialize DataTable after everything is loaded
+            $('#tbltasks').DataTable(); // Initialize DataTable after everything is loaded
+       
+          
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

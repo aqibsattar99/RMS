@@ -27,6 +27,8 @@ namespace RMS.Controllers
                      .Where(x => x.active == true)
                      .Sum(x => x.qty);
 
+            ViewBag.Tasks = _context.Tasks.Include(e=>e.Branch).Where(x => x.status == false).ToList();
+
 
             return View();
         }

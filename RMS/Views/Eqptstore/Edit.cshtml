@@ -1,58 +1,52 @@
-﻿@model RMS.Models.Eqptstore
+﻿@model RMS.Models.EqptstoreVM
 
-@{
-    Layout = null;
-}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit Equipment Store</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-<!DOCTYPE html>
+                        <input type="hidden" asp-for="Id" />
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
+                        <div class="mb-3">
+                            <label asp-for="date" class="form-label">Date Last Updated</label>
+                            <input asp-for="date" class="form-control" disabled="disabled" value="@Model.date?.ToString("yyyy-MM-ddTHH:mm")" />
 
-<h4>Eqptstore</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="date" class="control-label"></label>
-                <input asp-for="date" class="form-control" />
-                <span asp-validation-for="date" class="text-danger"></span>
+                            <span asp-validation-for="date" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="eqptname" class="form-label">Equipment </label>
+                            @Html.TextBoxFor(model => model.eqptname, new { @class = "form-control", @disabled = "disabled" })
+
+                            <span asp-validation-for="eqptname" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="qty" class="form-label">Quantity</label>
+                            <input asp-for="qty" class="form-control" />
+                            <span asp-validation-for="qty" class="text-danger"></span>
+                        </div>
+
+                       
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="eqptid" class="control-label"></label>
-                <input asp-for="eqptid" class="form-control" />
-                <span asp-validation-for="eqptid" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="qty" class="control-label"></label>
-                <input asp-for="qty" class="form-control" />
-                <span asp-validation-for="qty" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="active" class="control-label"></label>
-                <input asp-for="active" class="form-control" />
-                <span asp-validation-for="active" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
-</body>
-</html>

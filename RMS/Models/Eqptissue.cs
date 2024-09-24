@@ -26,9 +26,11 @@ namespace RMS.Models
     {
   
 
-        public int id { get; set; }
+        public int Id { get; set; }
         public DateTime? date { get; set; }
         public string? branch { get; set; }
+
+        public int? EqptnameId { get; set; }
         public string? eqpt { get; set; }
         public int? qty { get; set; }
         public string? remarks { get; set; }

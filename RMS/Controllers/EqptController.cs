@@ -60,10 +60,38 @@ namespace RMS.Controllers
                 eqptname.active = true;
                 _context.Add(eqptname);
                 await _context.SaveChangesAsync();
+              
+
+
+                // Now add the record to the Eqptstore table
+                var eqptstore = new Eqptstore
+                {
+                    eqptid = eqptname.Id, 
+                    qty = 0,
+                    date = DateTime.Now,
+                    active = true,
+                    updatedon = DateTime.Now,   
+                };
+
+                // Add the eqptstore entity to the context
+                _context.Add(eqptstore);
+
+                // Save the changes to the database
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
+
             }
+
+
+          
+
             return View(eqptname);
         }
+
+
+
+
 
         // GET: Eqpt/Edit/5
         public async Task<IActionResult> Edit(int? id)

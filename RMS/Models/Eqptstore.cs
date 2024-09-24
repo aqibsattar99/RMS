@@ -11,6 +11,7 @@ namespace RMS.Models
         public DateTime? date { get; set; }
      
         public int? eqptid { get; set; }
+
         public int? qty { get; set; }
        
         public bool? active { get; set; }
@@ -25,7 +26,9 @@ namespace RMS.Models
     {
         public int Id { get; set; }
 
+        // Updated Date
         public DateTime? date { get; set; }
+        
 
         public string? eqptname { get; set; }
         public int? qty { get; set; }

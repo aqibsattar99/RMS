@@ -16,7 +16,8 @@ namespace RMS.Models
         public DbSet<Eqptname> Eqptname { get; set; } = default!;
         public DbSet<Eqptissue> Eqptissue { get; set; } = default!;
         public DbSet<Eqptstore> Eqptstore { get; set; } = default!;
-
+        public DbSet<Tasks> Tasks { get; set; } = default!;
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Eqptstore>()
