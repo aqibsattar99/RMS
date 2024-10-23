@@ -2,7 +2,7 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">Edit Task</h4>
@@ -12,50 +12,124 @@
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                         <input type="hidden" asp-for="Id" />
+                        <div class="row">
+                            <div class="col-sm-6">
 
-                        <div class="mb-3">
-                            <label asp-for="branchid" class="form-label">Branch</label>
-                            @Html.TextBoxFor(model => model.Branch.name, new { @class = "form-control", @disabled = "disabled" })
-                            <span asp-validation-for="branchid" class="text-danger"></span>
+                                <!-- Branch Column -->
+                                <div class="mb-3">
+                                    <label for="branchid" class="form-label">Branch</label>
+                                    <select class="form-select" id="branchid" name="branchid">
+                                        @foreach (var B in ViewBag.Branch)
+                                        {
+
+                                            if (B.Id == Model.Id)
+                                            {
+                                                <option value="@B.Id" selected="selected">@B.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@B.Id">@B.Name</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+
+                            </div>
+
+                             <div class="col-sm-6">
+                                <!-- Equipment Repair Column -->
+                                <div class="mb-3">
+                                    <label asp-for="Eqptrepair" class="form-label">Equipment Repair</label>
+                                    <input asp-for="Eqptrepair" class="form-control" />
+                                    <span asp-validation-for="Eqptrepair" class="text-danger"></span>
+                                </div>
+
+
+                            </div>
+                              <div class="col-sm-6">
+                                <!-- Assigned To Column -->
+                                <div class="mb-3">
+                                    <label asp-for="Assignedid" class="form-label">Assigned To</label>
+                                    <select class="form-select" id="assignedid" name="assignedid">
+                                        @foreach (var BU in ViewBag.BranchUsers)
+                                        {
+                                            if (BU.id == Model.Assignedid)
+                                            {
+                                                <option value="@BU.id" selected="selected">@BU.name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@BU.id">@BU.name</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="col-sm-6">
+
+                                <div class="mb-3">
+                                    <label asp-for="Ionno" class="form-label">Ion No.</label>
+                                    <input asp-for="Ionno" class="form-control" />
+                                    <span asp-validation-for="Ionno" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-12">
+                                <div class="mb-3">
+                                    <label asp-for="Assigndate" class="form-label">Assign Date</label>
+                                    @{
+                                        var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+                                    }
+
+                                    <input name="Assigndate" class="form-control" type="date" value="@currentDate" />
+                                    <span asp-validation-for="Assigndate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-12">
+                                <div class="mb-3">
+                                    <label asp-for="Problem" class="form-label">Problem / Fault</label>
+
+                                    <textarea id="Problem" name="Problem" class="form-control">@Model.Problem</textarea>
+
+                                </div>
+
+                            </div>
+
+
+                       
+
+                        </div>
+                     
+                      
+                      
+
+                        <!-- Problem Column -->
+                     
+
+                        <!-- Status Column -->
+                      
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary" style="width:100%;">Submit</button>
+                            </div><br /><br />
+                            <div class="col-sm-6">
+                                <a href="/tasks" class="btn btn-success" style="width:100%;">Back</a>
+                            </div>
+
+
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="eqptrepair" class="form-label">Equipment Repair</label>
-                            <input asp-for="eqptrepair" class="form-control" />
-                            <span asp-validation-for="eqptrepair" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="assigned" class="form-label">Assigned</label>
-                            <input asp-for="assigned" class="form-control" />
-                            <span asp-validation-for="assigned" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="completiondate" class="form-label">Completion Date</label>
-                            <input asp-for="completiondate" class="form-control" />
-                            <span asp-validation-for="completiondate" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="problem" class="form-label">Problem</label>
-                            <input asp-for="problem" class="form-control" />
-                            <span asp-validation-for="problem" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="status" class="form-label">Status</label>
-                            <select name="status" class="form-control">
-                                <option value="false">Pending</option>
-                                <option value="true">Completed</option>
-                            </select>
-  
-                        </div>
-
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
                     </form>
                 </div>
             </div>

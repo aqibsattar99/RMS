@@ -1,0 +1,82 @@
+﻿@model RMS.Models.Tasks
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit Task</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Complete">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <input type="hidden" asp-for="Id" />
+                        <div class="row">
+                          
+
+                            <div class="col-sm-12">
+
+                                <!-- Branch Column -->
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-select" id="status" name="status">
+                                       <option value="" >Select Status</option>
+                                       <option value="true" >Completed</option>
+                                   
+                                        
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-12">
+                                <div class="mb-3">
+
+                                    <label asp-for="Remarks" class="form-label"> Remarks </label>
+
+                                    <textarea id="remarks" name="remarks" class="form-control"></textarea>
+
+                                </div>
+
+                            </div>
+
+
+                       
+
+                        </div>
+                     
+                      
+                      
+
+                        <!-- Problem Column -->
+                     
+
+                        <!-- Status Column -->
+                      
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary" style="width:100%;">Submit </button>
+                            </div><br /><br />
+                            <div class="col-sm-6">
+                                <a href="/tasks" class="btn btn-success" style="width:100%;">Back</a>
+                            </div>
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

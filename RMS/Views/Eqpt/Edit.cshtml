@@ -1,4 +1,4 @@
-﻿@model RMS.Models.Eqptname
+﻿@model RMS.Models.Eqpttype
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -14,13 +14,22 @@
 
                         <div class="mb-3">
                            <label>Name</label>
-                            <input asp-for="name" class="form-control" />
-                            <span asp-validation-for="name" class="text-danger"></span>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary" style="width:100%;">Save</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="/Eqpt" class="btn btn-success" style="width:100%;">Back</a>
+                                </div>
+                            </div>
+
+
                         </div>
                     </form>
                 </div>

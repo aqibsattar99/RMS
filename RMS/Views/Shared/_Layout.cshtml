@@ -3,22 +3,52 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RMS</title>
+    <title>RMS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RMS.styles.css" asp-append-version="true" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+
+    @* Font Awsome *@
+    <link href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+
+
+   
+
+
     @* Datatables CSS & JS *@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
   
-   
+   <style>
+       *{
+            font-family: Comfortaa !important;
+       }
+        .nav-link.active {
+           
+            color: #fff !important; /* Change the color for the active link */
+            background: #000;
+            border-radius: 50px;
+            padding: 5px 15px;
+        }
+
+        #tbleqptissue thead tr {
+            font-size: 14px !important;
+        }
+        #tbleqptissue thead tr {
+            font-size: 14px !important;
+        }
+
+   </style>
 
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RMS</a>
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><b>RMS</b></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -32,15 +62,13 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Branch" asp-action="Index">Branch</a>
                         </li>
                           <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Eqpt" asp-action="Index">Eqpt</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Eqpt" asp-action="Index">Eqpt Type</a>
                         </li>
                           <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="EqptIssue" asp-action="Index">Eqpt Issue</a>
                         </li>
 
-                             <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Eqptstore" asp-action="Index">Eqpt Store</a>
-                        </li>
+                        
                            <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="tasks" asp-action="Index">Branch Tasks</a>
                         </li>
@@ -73,11 +101,82 @@
         $(document).ready(function () {
             $('#tblbranch').DataTable(); // Initialize DataTable after everything is loaded
             $('#tbleqptstore').DataTable(); // Initialize DataTable after everything is loaded
-            $('#tbleqptissue').DataTable(); // Initialize DataTable after everything is loaded
+
+         
+            // Initialize the DataTable
+            var tableeqpt = $('#tbleqptissue').DataTable();
+
+            // Branch dropdown filter
+            $('#branchFilter').on('change', function () {
+                var branchValue = $(this).val();
+                tableeqpt.columns(1).search(branchValue).draw(); // Filter by branch (2nd column)
+            });
+
+            // Equipment dropdown filter
+            $('#eqptFilter').on('change', function () {
+                var eqptValue = $(this).val();
+                tableeqpt.columns(2).search(eqptValue).draw(); // Filter by equipment name (4th column)
+            });
+            
+            
             $('#tbleqpt').DataTable(); // Initialize DataTable after everything is loaded
+            
+            
+            
+            
+            
+            
+            
+            
             $('#tbltasks').DataTable(); // Initialize DataTable after everything is loaded
-       
+
+
+            // Initialize the DataTable
+            var tabletask = $('#tbltasks').DataTable();
+
+            // Branch dropdown filter
+            $('#FilterBranch').on('change', function () {
+                var branchValue = $(this).val();
+                tabletask.columns(1).search(branchValue).draw(); // Filter by branch (2nd column)
+            });
+
+            // Equipment dropdown filter
+            $('#FilterStatus').on('change', function () {
+                var eqptValue = $(this).val();
+                tabletask.columns(6).search(eqptValue).draw(); // Filter by equipment name (4th column)
+            });
+
+
+            // Initialize the DataTable
+            var tabletaskhome = $('#tbltaskshome').DataTable();
+
+            // Branch dropdown filter
+            $('#FilterBranchHome').on('change', function () {
+                var branchValue = $(this).val();
+                tabletaskhome.columns(1).search(branchValue).draw(); // Filter by branch (2nd column)
+            });
+
+            
+
+
+
+
           
+        });
+    </script>
+    <script>
+        // Get the current URL path
+        const currentPath = window.location.pathname;
+
+        // Select all the navigation links
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+        // Loop through each link and check if the href matches the current URL
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                // Add the 'active' class to the matching link
+                link.classList.add('active');
+            }
         });
     </script>
 

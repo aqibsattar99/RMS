@@ -21,7 +21,7 @@ namespace RMS.Controllers
         // GET: Eqpt
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Eqptname.Where(x=>x.active == true).ToListAsync());
+            return View(await _context.Eqpttype.Where(x=>x.Active == true).ToListAsync());
         }
 
         // GET: Eqpt/Details/5
@@ -32,7 +32,7 @@ namespace RMS.Controllers
                 return NotFound();
             }
 
-            var eqptname = await _context.Eqptname
+            var eqptname = await _context.Eqpttype
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (eqptname == null)
             {
@@ -53,11 +53,11 @@ namespace RMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,active")] Eqptname eqptname)
+        public async Task<IActionResult> Create([Bind("Id,Name,active")] Eqpttype eqptname)
         {
             if (ModelState.IsValid)
             {
-                eqptname.active = true;
+                eqptname.Active = true;
                 _context.Add(eqptname);
                 await _context.SaveChangesAsync();
               
@@ -66,11 +66,11 @@ namespace RMS.Controllers
                 // Now add the record to the Eqptstore table
                 var eqptstore = new Eqptstore
                 {
-                    eqptid = eqptname.Id, 
-                    qty = 0,
-                    date = DateTime.Now,
-                    active = true,
-                    updatedon = DateTime.Now,   
+                    Eqptid = eqptname.Id, 
+                    Qty = 0,
+                    Date = DateTime.Now,
+                    Active = true,
+                    Updatedon = DateTime.Now,   
                 };
 
                 // Add the eqptstore entity to the context
@@ -101,7 +101,7 @@ namespace RMS.Controllers
                 return NotFound();
             }
 
-            var eqptname = await _context.Eqptname.FindAsync(id);
+            var eqptname = await _context.Eqpttype.FindAsync(id);
             if (eqptname == null)
             {
                 return NotFound();
@@ -114,7 +114,7 @@ namespace RMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,name,active")] Eqptname eqptname)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,active")] Eqpttype eqptname)
         {
             if (id != eqptname.Id)
             {
@@ -125,7 +125,7 @@ namespace RMS.Controllers
             {
                 try
                 {
-                    eqptname.active = true;
+                    eqptname.Active = true;
                     _context.Update(eqptname);
                     await _context.SaveChangesAsync();
                 }
@@ -153,7 +153,7 @@ namespace RMS.Controllers
                 return NotFound();
             }
 
-            var eqptname = await _context.Eqptname
+            var eqptname = await _context.Eqpttype
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (eqptname == null)
             {
@@ -168,19 +168,22 @@ namespace RMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var eqptname = await _context.Eqptname.FindAsync(id);
+            var eqptname = await _context.Eqpttype.FindAsync(id);
             if (eqptname != null)
             {
-                _context.Eqptname.Remove(eqptname);
+              
+                eqptname.Active = false;
+                _context.Eqpttype.Update(eqptname);
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EqptnameExists(int id)
         {
-            return _context.Eqptname.Any(e => e.Id == id);
+            return _context.Eqpttype.Any(e => e.Id == id);
         }
     }
 }

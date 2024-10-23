@@ -11,45 +11,91 @@
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-                        <div class="mb-3">
-                            <label for="branchid" class="form-label">Branch</label>
-                            <select class="form-control" id="branchid" name="branchid">
-                                @foreach (var B in ViewBag.Branch)
-                                {
-                                    <option value="@B.Id">@B.name</option>
-                                }
-                            </select>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label asp-for="eqptrepair" class="form-label">Equipment Repair</label>
-                            <input asp-for="eqptrepair" class="form-control" />
-                            <span asp-validation-for="eqptrepair" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="assigned" class="form-label">Assigned To</label>
-                            <input asp-for="assigned" class="form-control" />
-                            <span asp-validation-for="assigned" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="completiondate" class="form-label">Completion Date</label>
-                            <input asp-for="completiondate" class="form-control" />
-                            <span asp-validation-for="completiondate" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="problem" class="form-label">Problem Description</label>
-                            <input asp-for="problem" class="form-control" />
-                            <span asp-validation-for="problem" class="text-danger"></span>
-                        </div>
-
                     
+
+
+                       
+
+
+                       
+                      
 
                         <div class="d-grid">
                             <div class="row">
+
+
+                                <div class="col-sm-6">
+
+                                    <div class="mb-3">
+                                        <label for="branchid" class="form-label">Branch</label>
+                                        <select class="form-control" id="branchid" name="branchid">
+                                            @foreach (var B in ViewBag.Branch)
+                                            {
+                                                <option value="@B.Id">@B.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                  <div class="col-sm-6">
+
+                                    <div class="mb-3">
+                                        <label asp-for="Eqptrepair" class="form-label">Equipment Repair</label>
+                                        <input asp-for="Eqptrepair" class="form-control" />
+                                        <span asp-validation-for="Eqptrepair" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+
+                              @*     <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label asp-for="Assignedid" class="form-label">Assigned To</label>
+                                        <select class="form-control" id="assignedid" name="assignedid">
+                                            @foreach (var BU in ViewBag.BranchUsers)
+                                            {
+                                                <option value="@BU.id">@BU.name</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div> *@
+
+                                  <div class="col-sm-6">
+
+                                    <div class="mb-3">
+                                        <label asp-for="Ionno" class="form-label">Ion No.</label>
+                                        <input asp-for="Ionno" class="form-control" />
+                                        <span asp-validation-for="Ionno" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                  <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label asp-for="Assigndate" class="form-label">Assign Date</label>
+                                        @{
+                                            var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+                                        }
+
+                                        <input name="Assigndate" class="form-control" type="date" value="@currentDate" />
+                                        <span asp-validation-for="Assigndate" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                  <div class="col-sm-12">
+                                    <div class="mb-3">
+                                        <label asp-for="Problem" class="form-label">Problem / Fault</label>
+                                       
+                                        <textarea id="Problem" name="Problem" class="form-control"></textarea>
+                                        
+                                    </div>
+
+                                </div>
+
+                                
+
+
+
                                 <div class="col-sm-6">
                                     <button type="submit" class="btn btn-primary" style="width:100%;">Create</button>
                                 </div>

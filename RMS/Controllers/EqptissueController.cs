@@ -12,28 +12,38 @@ namespace RMS.Controllers
     public class EqptissueController : Controller
     {
         private readonly dbRMSContext _context;
-
         public EqptissueController(dbRMSContext context)
         {
+           
             _context = context;
         }
 
         // GET: Eqptissue
         public async Task<IActionResult> Index()
         {
+
+            ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
+            ViewBag.Eqptconditions = _context.Eqptcondition.ToList();
+            ViewBag.Eqpttype = _context.Eqpttype.Where(x => x.Active == true).ToList();
+
             var data = await _context.Eqptissue
                  .Include(e => e.Branch)
-                .Include(e => e.Eqptname)
-                .Where(e => e.active == true)
+                .Include(e => e.Eqpttype)
+                .Where(e => e.Active == true)
                 .Select(e => new EqptissueVM
                 {
                     Id = e.Id,
-                    date = e.date,
-                    branch = e.Branch.name,
-                    eqpt = e.Eqptname.name,
-                    qty = e.qty,
-                    remarks = e.remarks,
-                    active = e.active
+                    Date = e.Date,
+                    DateFormat = e.Date.ToString(),
+                    Branch = e.Branch.Name,
+                    Eqpttypename = e.Eqpttype.Name,
+                    Eqptname = e.Eqptname,
+                    Qty = e.Qty,
+                    Issueto = e.Issueto,
+                    Issuevoucher = e.Issuevoucher,
+                    Condition = e.Eqptcondition.Condition,
+                    Details = e.Details,
+                    Active = e.Active
                 })
                 .ToListAsync();
 
@@ -50,7 +60,24 @@ namespace RMS.Controllers
             }
 
             var eqptissue = await _context.Eqptissue
-                .Include(e => e.Branch)
+          .Include(e => e.Branch)
+                .Include(e => e.Eqpttype)
+                .Where(e => e.Active == true)
+                .Select(e => new EqptissueVM
+                {
+                    Id = e.Id,
+                    Date = e.Date,
+                    Branch = e.Branch.Name,
+                    Eqpttypename = e.Eqpttype.Name,
+                    Eqptname = e.Eqptname,
+                    Qty = e.Qty,
+                    Issueto = e.Issueto,
+                    Issuevoucher = e.Issuevoucher,
+                    Condition = e.Eqptcondition.Condition,
+                    Details = e.Details,
+                    Active = e.Active
+                })
+          
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (eqptissue == null)
             {
@@ -66,17 +93,11 @@ namespace RMS.Controllers
         // GET: Eqptissue/Create
         public IActionResult Create()
         {
-            ViewBag.Branch = _context.Branch.Where(x => x.active == true).ToList();
-            // In your controller action, prepare the ViewBag for the dropdown
-            ViewBag.Eqpt = _context.Eqptstore
-                                         .Include(e => e.Eqptname)
-                                         .Where(x => x.active == true)
-                                         .Select(e => new {
-                                             e.eqptid, // Get the equipment ID
-                                             EqptName = e.Eqptname.name, // Get the equipment name
-                                             e.qty // Available quantity
-                                         })
-                                         .ToList();
+            ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
+            ViewBag.Eqptconditions = _context.Eqptcondition.ToList();
+            ViewBag.Eqpt = _context.Eqpttype.Where(x => x.Active == true).ToList();
+
+       
             return View();
         }
 
@@ -86,69 +107,20 @@ namespace RMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,date,branchid,EqptnameId,qty,remarks,active")] Eqptissue eqptissue)
+        public async Task<IActionResult> Create(Eqptissue eqptissue)
         {
-            ViewBag.Branch = _context.Branch.Where(x => x.active == true).ToList();
-            ViewBag.Eqpt = _context.Eqptname.Where(x => x.active == true).ToList();
+            ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
+            ViewBag.Eqpt = _context.Eqpttype.Where(x => x.Active == true).ToList();
+            ViewBag.Eqptconditions = _context.Eqptcondition.ToList();
+
             if (ModelState.IsValid)
             {
 
-                // Start a transaction to ensure both the issue and the qty update happen together
-                using (var transaction = await _context.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        // Mark the new equipment issue as active
-                        eqptissue.active = true;
-                        _context.Add(eqptissue);
-
-                        // Find the corresponding Eqptstore by EqptnameId (which is eqptid in Eqptstore)
-                        var eqptstore = await _context.Eqptstore
-                                                      .FirstOrDefaultAsync(e => e.eqptid == eqptissue.EqptnameId);
-
-                        if (eqptstore != null)
-                        {
-                            // Reduce the qty in Eqptstore by the qty issued
-                            eqptstore.qty -= eqptissue.qty;
-
-                            // Ensure qty does not go below zero
-                            if (eqptstore.qty < 0)
-                            {
-                                // Optionally, handle the case where there's not enough quantity
-                                ModelState.AddModelError(string.Empty, "Not enough quantity in store to issue.");
-
-                                ViewBag.Branch = _context.Branch.Where(x => x.active == true).ToList();
-                                ViewBag.Eqpt = _context.Eqptname.Where(x => x.active == true).ToList();
-
-                                await transaction.RollbackAsync();
-                                return View(eqptissue);
-                            }
-
-                            // Update the Eqptstore entity
-                            _context.Update(eqptstore);
-
-                            // Save all changes (both the issue and the store update)
-                            await _context.SaveChangesAsync();
-
-                            // Commit the transaction
-                            await transaction.CommitAsync();
-
-                            return RedirectToAction(nameof(Index));
-                        }
-                        else
-                        {
-                            // Handle the case where the equipment is not found in the store
-                            ModelState.AddModelError(string.Empty, "Equipment not found in store.");
-                            await transaction.RollbackAsync();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        // If any error occurs, roll back the transaction
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-                }
+                    eqptissue.Active = true;
+                    _context.Add(eqptissue);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+              
             }
 
             // If we reach here, something failed; redisplay the form
@@ -156,31 +128,24 @@ namespace RMS.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
         // GET: Eqptissue/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
+            ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
+            ViewBag.Eqptconditions = _context.Eqptcondition.ToList();
+            ViewBag.Eqpt = _context.Eqpttype.Where(x => x.Active == true).ToList();
+
             if (id == null)
             {
                 return NotFound();
             }
 
             // Include the related Eqptname entity
-            var Eqptissue = await _context.Eqptissue
-                               
-                                          .Include(e => e.Eqptname)
-                              .Include(e => e.Branch)
-                                          .FirstOrDefaultAsync(m => m.Id == id);
+            var Eqptissue = await _context.Eqptissue                            
+                                            .Include(e => e.Eqpttype)
+                                            .Include(e => e.Branch)
+                                            .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Eqptissue == null)
             {
@@ -191,150 +156,35 @@ namespace RMS.Controllers
             var eqptissuevm = new EqptissueVM
             {
                 Id = Eqptissue.Id,
-                date = Eqptissue.date,
-                branch = Eqptissue.Branch?.name,
-                eqpt = Eqptissue.Eqptname?.name, // Assuming Eqptname has a property 'Name'
-                qty = Eqptissue.qty,
-                remarks = Eqptissue.remarks
+                Date = Eqptissue.Date,
+                Branch = Eqptissue.Branch?.Name,
+                Eqptname = Eqptissue.Eqpttype?.Name, // Assuming Eqptname has a property 'Name'
+                Qty = Eqptissue.Qty,
+                Details = Eqptissue.Details
             };
 
-            return View(eqptissuevm);
+            return View(Eqptissue);
         }
 
 
-        // POST: Eqptissue/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,date,branchid,eqptid,qty,remarks,active")] Eqptissue eqptissue)
-        //{
-        //    if (id != eqptissue.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(eqptissue);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!EqptissueExists(eqptissue.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["branchid"] = new SelectList(_context.Branch, "Id", "Id", eqptissue.branchid);
-        //    return View(eqptissue);
-        //}
-
-
+   
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,eqptid,qty,remarks")] EqptissueVM eqptissue)
+        public async Task<IActionResult> Edit(Eqptissue eqptissue)
         {
            
-            if (id != eqptissue.Id)
-            {
-                return NotFound();
-            }
+         
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    // Retrieve the original Eqptissue record
-                    var originalIssue = await _context.Eqptissue.AsNoTracking()
-                                                .FirstOrDefaultAsync(e => e.Id == id);
 
-                    if (originalIssue == null)
-                    {
-                        return NotFound();
-                    }
+               
 
-                    // Retrieve the corresponding Eqptstore record
-                    var eqptstore = await _context.Eqptstore
-                                                  .FirstOrDefaultAsync(e => e.eqptid == originalIssue.EqptnameId);
-
-                    if (eqptstore != null)
-                    {
-                        // Check if qty is being updated
-                        if (eqptissue.qty != originalIssue.qty)
-                        {
-                            int qtyDifference = originalIssue.qty.GetValueOrDefault() - eqptissue.qty.GetValueOrDefault();
-
-                            // Check if we are decreasing the qty and if it's enough
-                            if (qtyDifference < 0) // If increasing the quantity
-                            {
-                                int availableQty = eqptstore.qty.GetValueOrDefault();
-                                int qtyToIssue = Math.Abs(qtyDifference); // Convert to positive for comparison
-
-                                if (availableQty < qtyToIssue)
-                                {
-                                    // Set error message and refresh the page
-                                    ViewBag.ErrorMessage = "Quantity not available in the store.";
-                                    ViewBag.Refresh = true; // Flag for page refresh
-                                    
-                                    
-                                    var  valreturn = _context.Eqptissue.Include(e => e.Eqptname)
-                              .Include(e => e.Branch).FirstOrDefault(e => e.Id == id);
-                                    // Return the view model with current values
-                                    var errorViewModel = new EqptissueVM
-                                    {
-                                        Id = valreturn.Id,
-                                        date = valreturn.date,
-                                        branch = valreturn.Branch?.name,
-                                        eqpt = valreturn.Eqptname?.name,
-                                        qty = valreturn.qty,
-                                        remarks = valreturn.remarks
-                                    };
-
-                                    return View(errorViewModel); // Return the current view with the error view model
-                                }
-                                // Decrease from the eqptstore
-                                eqptstore.qty -= qtyToIssue;
-                            }
-                            else if (qtyDifference > 0) // If decreasing the quantity
-                            {
-                                eqptstore.qty += qtyDifference;
-                            }
-
-                            // Update the Eqptstore in the context
-                            _context.Update(eqptstore);
-                        }
-                    }
-
-                    // Update only the changed fields of Eqptissue
-                    originalIssue.qty = eqptissue.qty; // Update qty
-                    originalIssue.remarks = eqptissue.remarks; // Update remarks if provided
-
-                    // Update the modified issue back to the context
-                    _context.Update(originalIssue);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EqptissueExists(eqptissue.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                eqptissue.Active = true;
+                _context.Update(eqptissue);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }

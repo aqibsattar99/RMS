@@ -1,91 +1,197 @@
-﻿@model RMS.Models.EqptissueVM
-
+﻿@model RMS.Models.Eqptissue
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Edit Equipment Issue</h4>
+                    <h4 class="mb-0">Update Issue Equipment</h4>
                 </div>
                 <div class="card-body">
-                    @if (ViewBag.ErrorMessage != null)
-                    {
-                        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
-
-                       
-                    }
-                    
-
                     <form asp-action="Edit">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                        
-                        <input type="hidden" asp-for="Id" />
 
-                    
 
-                        <div class="mb-3">
-                            <label asp-for="date" class="form-label">Date Last Updated</label>
-                            <input asp-for="date" class="form-control" disabled="disabled" value="@Model.date?.ToString("yyyy-MM-ddTHH:mm")" />
+                        <input value="@Model.Id" type="hidden" name="Id" />
 
-                            <span asp-validation-for="date" class="text-danger"></span>
+                        <div class="row">
+                            <!-- Left column (first set of form fields) -->
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label asp-for="Date" class="form-label">Date</label>
+                                    <input value="@Model.Date" class="form-control" name="Date"/>
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label for="EqptId" class="form-label">Equipment</label>
+                                    <select class="form-control" id="EqptId" name="EqptId">
+                                        @foreach (var eqpt in ViewBag.Eqpt)
+                                        {
+                                            if (eqpt.Id == Model.EqptId)
+                                            {
+                                                <option value="@eqpt.Id" selected="selected">@eqpt.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@eqpt.Id">@eqpt.Name</option>
+                                            }
+                                        }
+                                    </select>
+
+
+                                   
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label asp-for="Eqptname" class="form-label">Equipment Name</label>
+                                    <input value="@Model.Eqptname" class="form-control" name="Eqptname" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label asp-for="Qty" class="form-label">Quantity</label>
+                                    <input value="@Model.Qty" class="form-control" name="Qty" />
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label for="branchid" class="form-label">Branch</label>
+                                  
+                                    <select class="form-control" id="branchid" name="branchid">
+                                        @foreach (var B in ViewBag.Branch)
+                                        {
+                                            if (B.Id == Model.Branchid)
+                                            {
+                                                <option value="@B.Id" selected="selected">@B.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@B.Id">@B.Name</option>
+                                            }
+                                        }
+                                    </select>
+
+
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+
+
+                                    <label>Condition</label>
+                                 
+
+                                    <select class="form-control" id="Conditionid" name="Conditionid">
+
+                                        @foreach (var C in ViewBag.Eqptconditions)
+                                        {
+                                            if (C.Id == Model.Conditionid)
+                                            {
+                                                <option value="@C.Id" selected="selected">@C.Condition</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@C.Id">@C.Condition</option>
+                                            }
+                                        }
+                                    </select>
+
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+
+
+                                    <label>Issue To</label>
+                                    <input class="form-control" value="@Model.Issueto" id="Issueto" name="Issueto" />
+
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+
+
+                                    <label>Issue Voucher</label>
+                                    <input class="form-control" value="@Model.Issuevoucher" id="Issuevoucher" name="Issuevoucher" />
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-12">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Details/Specifications</label>
+
+                                    <textarea class="form-control"  name="Details">@Model.Details</textarea>
+
+                                </div>
+
+                            </div>
+
+
+
+
+
+
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="eqpt" class="form-label">Equipment Name</label>
-                            @Html.TextBoxFor(model => model.eqpt, new { @class = "form-control", @disabled = "disabled" })
+                        <div class="row">
 
-                            <span asp-validation-for="eqpt" class="text-danger"></span>
-                        </div>
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary" style="width:100%;">Submit</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="/EqptIssue" class="btn btn-success" style="width:100%;">Back</a>
+                            </div>
 
-                          <div class="mb-3">
-                            <label asp-for="branch" class="form-label">Branch Name</label>
-                            @Html.TextBoxFor(model => model.branch, new { @class = "form-control", @disabled = "disabled" })
 
-                            <span asp-validation-for="branch" class="text-danger"></span>
-                        </div>
-
-                      @*   <div class="mb-3">
-                            <label for="branchid" class="form-label">Branch</label>
-                            <select class="form-control" id="branchid" name="branchid">
-                                @foreach (var B in ViewBag.Branch)
-                                {
-                                    <option value="@B.Id">@B.name</option>
-                                }
-                            </select>
-                        </div> *@
-
-@* 
-                        <div class="mb-3">
-                            <label for="EqptnameId" class="form-label">Equipment</label>
-                            <select class="form-control" id="EqptnameId" name="eqptid">
-                                @foreach (var E in ViewBag.Eqpt)
-                                {
-                                    <option value="@E.Id">@E.name</option>
-                                }
-                            </select>
-                        </div> *@
-
-                        <div class="mb-3">
-                            <label asp-for="qty" class="form-label">Quantity</label>
-                            <input asp-for="qty" class="form-control" />
-                            <span asp-validation-for="qty" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="remarks" class="form-label">Remarks</label>
-                            <input asp-for="remarks" class="form-control" />
-                            <span asp-validation-for="remarks" class="text-danger"></span>
                         </div>
 
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
+
+
+
+
+
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-

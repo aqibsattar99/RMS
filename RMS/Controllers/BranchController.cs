@@ -21,7 +21,7 @@ namespace RMS.Controllers
         // GET: Branch
         public async Task<IActionResult> Index()
         {
-            var data = await _context.Branch.Where(x => x.active == true).ToListAsync();
+            var data = await _context.Branch.Where(x => x.Active == true).ToListAsync();
             return View(data);
         }
 
@@ -54,11 +54,11 @@ namespace RMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,active")] Branch branch)
+        public async Task<IActionResult> Create([Bind("Id,Name,active")] Branch branch)
         {
             if (ModelState.IsValid)
             {
-                branch.active = true;
+                branch.Active = true;
                 _context.Add(branch);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +87,7 @@ namespace RMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,name,active")] Branch branch)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,active")] Branch branch)
         {
             if (id != branch.Id)
             {
@@ -98,7 +98,7 @@ namespace RMS.Controllers
             {
                 try
                 {
-                    branch.active = true;
+                    branch.Active = true;
                     _context.Update(branch);
                     await _context.SaveChangesAsync();
                 }
@@ -145,7 +145,7 @@ namespace RMS.Controllers
             if (branch != null)
             {
                 // Set the active column to false instead of deleting the record
-                branch.active = false;
+                branch.Active = false;
                 _context.Branch.Update(branch);
 
                 await _context.SaveChangesAsync();

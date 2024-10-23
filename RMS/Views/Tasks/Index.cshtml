@@ -1,10 +1,40 @@
-﻿@model IEnumerable<RMS.Models.Tasks>
+﻿@model IEnumerable<RMS.Models.TasksVM>
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <h2>Task List</h2>
         <a asp-action="Create" class="btn btn-primary">Create New</a>
     </div>
+
+
+    <!-- Dropdown filters -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <select id="FilterBranch" class="form-control">
+                <option value="">Select Branch</option>
+                @foreach (var b in ViewBag.Branch)
+                {
+                    <option value="@b.Name">@b.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select id="FilterStatus" class="form-control">
+                <option value="">Select Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+               
+                  
+            </select>
+        </div>
+
+   
+    </div>
+
+
+
+
     <div class="table-responsive mt-3"> 
         <table class="table table-striped table-bordered table-hover" id="tbltasks">
             <thead class="table-dark">
@@ -12,8 +42,8 @@
                     <th>Sr</th>
                     <th>Branch</th>
                     <th>Repair Equipment</th>
-                    <th>Assigned</th>
-                    <th>Completion Date</th>
+                    <th>ION No.</th>
+                    <th>Date</th>
                     <th>Problem/Error</th>
                     <th>Status</th>
                 
@@ -29,34 +59,53 @@
                     i++;
                     <tr>
                         <td>@i</td>
-                        <td>@Html.DisplayFor(modelItem => item.Branch.name)</td>
-                        <td>@Html.DisplayFor(modelItem => item.eqptrepair)</td>
-                        <td>@Html.DisplayFor(modelItem => item.assigned)</td>
-                        <td>@item.completiondate?.ToString("MMM-dd-yyyy")</td>
+                        <!-- Display Branch name -->
+                        <td>@Html.DisplayFor(modelItem => item.Branch)</td>
 
-                        <td>@Html.DisplayFor(modelItem => item.problem)</td>
+                        <!-- Display Equipment repair details -->
+                        <td>@Html.DisplayFor(modelItem => item.Eqptrepair)</td>
+
+                        <!-- Display Assigned user name -->
+                        <td>@Html.DisplayFor(modelItem => item.Ionno)</td>
+
+                        <!-- Display formatted completion date -->
+                      
+                        <td>@item.Assigndate</td>
+
+                        <!-- Display the problem description -->
+                        <td>@Html.DisplayFor(modelItem => item.Problem)</td>
+
+                        <!-- Display task status: Pending or Completed -->
                         <td>
-                            @if (item.status == false)
+                            @if (item.Status == false)
                             {
-                                <span>Pending</span>
+                                <span class="badge bg-warning">Pending</span>
                             }
                             else
                             {
-                                <span>Completed</span>
+                                <span class="badge bg-success">Completed</span>
                             }
                         </td>
+
+                        <!-- Action buttons: Edit (if pending) and Delete -->
                         <td>
-                            @if (item.status == false)
+                            @if (item.Status == false)
                             {
-                                <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-info btn-sm" asp-action="Complete" asp-route-id="@item.Id">✔️</a>
+
+                                <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">✏️</a>
 
                             }
-
-                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            @if (item.Status == true)
+                                {
+                                <a class="btn btn-success btn-sm" asp-action="Details" asp-route-id="@item.Id"> 📝</a>
+                                }
+                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">🗑️</a>
                         </td>
                     </tr>
                 }
             </tbody>
+
         </table>
     </div>
 </div>

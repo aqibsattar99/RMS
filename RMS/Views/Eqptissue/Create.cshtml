@@ -2,67 +2,166 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Issue New Equipment</h4>
+                    <h4 class="mb-0">Issue Equipment</h4>
                 </div>
                 <div class="card-body">
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-                        <div class="mb-3">
-                            <label asp-for="date" class="form-label">Date</label>
-                            <input asp-for="date" class="form-control" />
-                            <span asp-validation-for="date" class="text-danger"></span>
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="branchid" class="form-label">Branch</label>
-                            <select class="form-control" id="branchid" name="branchid">
-                                @foreach (var B in ViewBag.Branch)
-                                {
-                                    <option value="@B.Id">@B.name</option>
-                                }
-                            </select>
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="EqptnameId" class="form-label">Equipment</label>
-                            <select class="form-control" id="EqptnameId" name="EqptnameId">
-                                @foreach (var eqpt in ViewBag.Eqpt)
-                                {
-                                    <option value="@eqpt.eqptid">@eqpt.EqptName (Avl Qty: @eqpt.qty)</option>
-                                }
-                            </select>
-                        </div>
 
-                        <div class="mb-3">
-                            <label asp-for="qty" class="form-label">Quantity</label>
-                            <input asp-for="qty" class="form-control" />
-                            <span asp-validation-for="qty" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="remarks" class="form-label">Remarks</label>
-                            <input asp-for="remarks" class="form-control" />
-                            <span asp-validation-for="remarks" class="text-danger"></span>
-                        </div>
-
-                      
-
-                        <div class="d-grid">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <button type="submit" class="btn btn-primary" style="width:100%;">Create</button>
+                        <div class="row">
+                            <!-- Left column (first set of form fields) -->
+                            <div class="col-sm-3">
+                                
+                                <div class="mb-3">
+                                    <label asp-for="Date" class="form-label">Date</label>
+                                    <input asp-for="Date" class="form-control" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
                                 </div>
-                                <div class="col-sm-6">
-                                    <a href="/EqptIssue" class="btn btn-success" style="width:100%;">Back</a>
+                            
+                            </div>  
+                                 
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label for="EqptId" class="form-label">Equipment</label>
+                                    <select class="form-control" id="EqptId" name="EqptId">
+                                        @foreach (var eqpt in ViewBag.Eqpt)
+                                        {
+                                            <option value="@eqpt.Id">@eqpt.Name </option>
+                                        }
+                                    </select>
                                 </div>
+                            
+                            </div>  
+                                
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label asp-for="Eqptname" class="form-label">Equipment Name</label>
+                                    <input asp-for="Eqptname" class="form-control" />
+                                    <span asp-validation-for="Eqptname" class="text-danger"></span>
+                                </div>
+                            
+                            </div>
+
+                             <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label asp-for="Qty" class="form-label">Quantity</label>
+                                    <input asp-for="Qty" class="form-control" />
+                                    <span asp-validation-for="Qty" class="text-danger"></span>
+                                </div>
+                            
                             </div>
 
 
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+                                    <label for="branchid" class="form-label">Branch</label>
+                                    <select class="form-control" id="branchid" name="branchid">
+                                        @foreach (var B in ViewBag.Branch)
+                                        {
+                                            <option value="@B.Id">@B.Name</option>
+                                        }
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+                        
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+
+
+                                    <label class="form-label">Condition</label>
+                                    <select class="form-control" id="Conditionid" name="Conditionid">
+
+                                        @foreach (var C in ViewBag.Eqptconditions)
+                                            {
+                                            <option value="@C.Id">@C.Condition</option>
+                                            }
+
+                                        
+                                        </select>
+                                 
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+
+                                   
+                                    <label class="form-label">Issue To</label>
+                                    <input class="form-control" id="Issueto" name="Issueto" />
+                                  
+
+                                </div>
+
+                            </div>
+
+                            
+                            <div class="col-sm-3">
+
+                                <div class="mb-3">
+
+
+                                    <label class="form-label">Issue Voucher</label>
+                                    <input class="form-control" id="Issuevoucher" name="Issuevoucher" />
+                                  
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-12">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Details/Specifications</label>
+                    
+                                    <textarea class="form-control" name="Details"></textarea>
+                                    
+                                </div>
+
+                            </div>
+
+
+
+
+
+
                         </div>
+
+                          <div class="row">
+
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-primary" style="width:100%;">Submit</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="/EqptIssue" class="btn btn-success" style="width:100%;">Back</a>
+                            </div>
+
+
+                          </div>
+                          
+                       
+
+                      
+
+
+
+
                     </form>
                 </div>
             </div>

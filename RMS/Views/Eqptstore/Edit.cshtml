@@ -14,23 +14,23 @@
                         <input type="hidden" asp-for="Id" />
 
                         <div class="mb-3">
-                            <label asp-for="date" class="form-label">Date Last Updated</label>
-                            <input asp-for="date" class="form-control" disabled="disabled" value="@Model.date?.ToString("yyyy-MM-ddTHH:mm")" />
+                            <label asp-for="Date" class="form-label">Date Last Updated</label>
+                            <input asp-for="Date" class="form-control" disabled="disabled" value="@Model.Date?.ToString("yyyy-MM-ddTHH:mm")" />
 
-                            <span asp-validation-for="date" class="text-danger"></span>
+                            <span asp-validation-for="Date" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="eqptname" class="form-label">Equipment </label>
-                            @Html.TextBoxFor(model => model.eqptname, new { @class = "form-control", @disabled = "disabled" })
+                            <label asp-for="Eqptname" class="form-label">Equipment </label>
+                            @Html.TextBoxFor(model => model.Eqptname, new { @class = "form-control", @disabled = "disabled" })
 
-                            <span asp-validation-for="eqptname" class="text-danger"></span>
+                            <span asp-validation-for="Eqptname" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="qty" class="form-label">Quantity</label>
-                            <input asp-for="qty" class="form-control" />
-                            <span asp-validation-for="qty" class="text-danger"></span>
+                            <label asp-for="Qty" class="form-label">Quantity</label>
+                            <input asp-for="Qty" class="form-control" />
+                            <span asp-validation-for="Qty" class="text-danger"></span>
                         </div>
 
                        

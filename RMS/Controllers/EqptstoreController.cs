@@ -22,14 +22,14 @@ namespace RMS.Controllers
         public async Task<IActionResult> Index()
         {
             var data = await _context.Eqptstore
-               .Include(e => e.Eqptname)
-               .Where(e => e.active == true)
+               .Include(e => e.Eqpttype)
+               .Where(e => e.Active == true)
                .Select(e => new EqptstoreVM
                {
                    Id = e.Id,
-                   date = e.date,
-                   eqptname = e.Eqptname.name,
-                   qty = e.qty,
+                   Date = e.Date,
+                   Eqptname = e.Eqpttype.Name,
+                   Qty = e.Qty,
                })
                .ToListAsync();
 
@@ -58,7 +58,7 @@ namespace RMS.Controllers
         // GET: Eqptstore/Create
         public IActionResult Create()
         {
-            ViewBag.Eqpt = _context.Eqptname.Where(x => x.active == true).ToList();
+            ViewBag.Eqpt = _context.Eqpttype.Where(x => x.Active == true).ToList();
 
             return View();
         }
@@ -68,11 +68,11 @@ namespace RMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,date,eqptid,qty,active")] Eqptstore eqptstore)
+        public async Task<IActionResult> Create([Bind("Id,date,eqptid,Qty,active")] Eqptstore eqptstore)
         {
             if (ModelState.IsValid)
             {
-                eqptstore.active = true;
+                eqptstore.Active = true;
                 _context.Add(eqptstore);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -94,7 +94,7 @@ namespace RMS.Controllers
 
             // Include the related Eqptname entity
             var eqptstore = await _context.Eqptstore
-                                          .Include(e => e.Eqptname)
+                                          .Include(e => e.Active)
                                           .FirstOrDefaultAsync(m => m.Id == id);
 
             if (eqptstore == null)
@@ -106,9 +106,9 @@ namespace RMS.Controllers
             var eqptstoreVM = new EqptstoreVM
             {
                 Id = eqptstore.Id,
-                date = eqptstore.updatedon,
-                eqptname = eqptstore.Eqptname?.name, // Assuming Eqptname has a property 'Name'
-                qty = eqptstore.qty
+                Date = eqptstore.Updatedon,
+                Eqptname = eqptstore.Eqpttype?.Name, // Assuming Eqptname has a property 'Name'
+                Qty = eqptstore.Qty
             };
 
             return View(eqptstoreVM);
@@ -124,7 +124,7 @@ namespace RMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,qty")] Eqptstore eqptstore)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Qty")] Eqptstore eqptstore)
         {
             if (id != eqptstore.Id)
             {
@@ -143,9 +143,9 @@ namespace RMS.Controllers
                     }
 
                     // Update only the fields you want to change
-                    existingEqptstore.qty = eqptstore.qty;
-                    existingEqptstore.updatedon = DateTime.Now;
-                    existingEqptstore.active = true;
+                    existingEqptstore.Qty = eqptstore.Qty;
+                    existingEqptstore.Updatedon = DateTime.Now;
+                    existingEqptstore.Active = true;
 
                     // Save the changes to the database
                     await _context.SaveChangesAsync();

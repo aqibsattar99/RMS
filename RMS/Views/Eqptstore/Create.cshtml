@@ -12,27 +12,27 @@
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                         <div class="mb-3">
-                            <label asp-for="date" class="form-label">Date</label>
-                            <input asp-for="date" class="form-control" />
-                            <span asp-validation-for="date" class="text-danger"></span>
+                            <label asp-for="Date" class="form-label">Date</label>
+                            <input asp-for="Date" class="form-control" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
                         </div>
 
                      
 
                         <div class="mb-3">
-                            <label for="EqptnameId" class="form-label">Equipment</label>
+                            <label for="EqptId" class="form-label">Equipment</label>
                             <select class="form-control" id="eqptid" name="eqptid">
                                 @foreach (var E in ViewBag.Eqpt)
                                 {
-                                    <option value="@E.Id">@E.name</option>
+                                    <option value="@E.Id">@E.Name</option>
                                 }
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="qty" class="form-label">Quantity</label>
-                            <input asp-for="qty" class="form-control" />
-                            <span asp-validation-for="qty" class="text-danger"></span>
+                            <label asp-for="Qty" class="form-label">Quantity</label>
+                            <input asp-for="Qty" class="form-control" />
+                            <span asp-validation-for="Qty" class="text-danger"></span>
                         </div>
 
 

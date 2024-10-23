@@ -64,7 +64,7 @@ namespace RMS.Migrations
                     b.Property<int?>("eqptid")
                         .HasColumnType("int");
 
-                    b.Property<int?>("qty")
+                    b.Property<int?>("Qty")
                         .HasColumnType("int");
 
                     b.Property<string>("remarks")
@@ -118,7 +118,7 @@ namespace RMS.Migrations
                     b.Property<int?>("eqptid")
                         .HasColumnType("int");
 
-                    b.Property<int?>("qty")
+                    b.Property<int?>("Qty")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

@@ -1,63 +1,94 @@
-﻿@model RMS.Models.Eqptissue
+﻿@model RMS.Models.EqptissueVM
 
-@{
-    Layout = null;
-}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card ">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Equipment Issue Details</h4>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <!-- Date -->
+                        <dt class="col-sm-3 text-primary">
+                             Issue Date
+                        </dt>
+                        <dd class="col-sm-9">
+                            
+                            @(Model?.Date?.ToString("yyyy-MM-dd") ?? "")
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
+                        </dd>
 
-<div>
-    <h4>Eqptissue</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.date)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.date)
-        </dd>
-        <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.EqptnameId)
-        </dt>
-        <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.EqptnameId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.qty)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.qty)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.remarks)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.remarks)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.active)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.active)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Branch)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Branch.Id)
-        </dd>
-    </dl>
+                         <!-- Date -->
+                        <dt class="col-sm-3 text-primary">
+                            Branch
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Model.Branch
+                        </dd>
+
+                          <!-- Date -->
+                        <dt class="col-sm-3 text-primary">
+                            Eqpt Type Name
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Model.Eqpttypename
+                        </dd>
+
+                           <!-- Date -->
+                        <dt class="col-sm-3 text-primary">
+                            Eqpt Name
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Model.Eqptname
+                        </dd>
+
+
+                         <dt class="col-sm-3 text-primary">
+                            Quantity
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Model.Qty
+                        </dd>
+                        
+                         <dt class="col-sm-3 text-primary">
+                            Issueto
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Model.Issueto
+                        </dd>
+
+
+                          <dt class="col-sm-3 text-primary">
+                            Issue Voucher
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Model.Issuevoucher
+                        </dd>
+
+                        
+                          <dt class="col-sm-3 text-primary">
+                            Details
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Model.Details
+                        </dd>
+
+
+
+
+
+
+
+                  
+                    </dl>
+                </div>
+                <div class="card-footer text-center">
+                
+                    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-</body>
-</html>

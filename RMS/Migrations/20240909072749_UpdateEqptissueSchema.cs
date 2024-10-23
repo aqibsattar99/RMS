@@ -48,7 +48,7 @@ namespace RMS.Migrations
                     date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     branchid = table.Column<int>(type: "int", nullable: true),
                     eqptid = table.Column<int>(type: "int", nullable: true),
-                    qty = table.Column<int>(type: "int", nullable: true),
+                    Qty = table.Column<int>(type: "int", nullable: true),
                     remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: true),
             
@@ -76,7 +76,7 @@ namespace RMS.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     eqptid = table.Column<int>(type: "int", nullable: true),
-                    qty = table.Column<int>(type: "int", nullable: true),
+                    Qty = table.Column<int>(type: "int", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: true),
                     EqptnameId = table.Column<int>(type: "int", nullable: true)
                 },

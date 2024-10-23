@@ -1,26 +1,69 @@
 ﻿@model IEnumerable<RMS.Models.EqptissueVM>
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <h2>Issued Equipments</h2>
         <a asp-action="Create" class="btn btn-primary">Create New</a>
     </div>
+
+    <!-- Dropdown filters -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label for="branchFilter" class="form-label">Select Branch:</label>
+            <select id="branchFilter" class="form-control">
+                <option value="">All</option>
+                @foreach (var b in ViewBag.Branch)
+                {
+                    <option value="@b.Name">@b.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="eqptFilter" class="form-label">Select Equipment:</label>
+            <select id="eqptFilter" class="form-control">
+                <option value="">All</option>
+                @foreach (var eqpt in ViewBag.Eqpttype)
+                {
+                    <option value="@eqpt.Name">@eqpt.Name</option>
+                }
+            </select>
+        </div>   
+        
+        <div class="col-md-3">
+            <label for="eqptFilter" class="form-label">Select Condition:</label>
+            <select id="eqptFilter" class="form-control">
+                <option value="">All</option>
+                @foreach (var cond in ViewBag.Eqptconditions)
+                {
+                    <option value="@cond.Condition">@cond.Condition</option>
+                }
+            </select>
+        </div>  
+        
+    @*     <div class="col-md-3">
+            <label for="eqptFilter" class="form-label"> &nbsp; </label>
+            <a href="#" class="btn btn-warning">Print</a>
+
+        </div> *@
+    </div>
+
+
     <div class="table-responsive mt-3">
         <table class="table table-striped table-bordered table-hover" id="tbleqptissue">
             <thead class="table-dark">
           
                 <tr>
-                    <th>
-                        Sr
-                    </th>
-                    <th>Date</th>
+                    <th>Sr</th>
                     <th>Branch</th>
-                    <th>Equipment</th>
-                    <th>Quantity</th>
-                    <th>Remarks</th>
+                    <th>Eqpt Type</th>
+                    <th>Eqpt Name</th>
+                    <th>Qty</th>
+                    <th>Condition</th>
+                    <th>I/Voucher</th>
                     <th>Active</th>
-                    <th></th>
                 </tr>
+
             </thead>
             <tbody>
                 @{
@@ -30,24 +73,21 @@
                 {
                     i++;
                     <tr>
-                        <td>
-                            @i
-                        </td>
-                        <td>@item.date?.ToString("yyyy-MM-dd")</td>
-                       <td>@item.branch</td>
-                        <td>@item.eqpt</td> 
-                        <td>@item.qty</td>
-                        <td>@item.remarks</td>
-                        <td>@(item.active.HasValue && item.active.Value ? "Yes" : "No")</td>
+                        <td>@i</td>
+                        <td>@item.Branch</td>
+                        <td>@item.Eqpttypename</td>
+                        <td>@item.Eqptname</td> 
+                        <td>@item.Qty</td>
+                        <td>@item.Condition</td>
+                        <td>@item.Issuevoucher</td>
                         <td>
                             <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                           @*  <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.id">Details</a> | *@
+                            <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
                             <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-    </div>
     </div>
     </div>

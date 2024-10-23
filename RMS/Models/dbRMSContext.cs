@@ -11,19 +11,38 @@ namespace RMS.Models
         public dbRMSContext(DbContextOptions<dbRMSContext> options)
             : base(options)
         {
+        
         }
+
         public DbSet<Branch> Branch { get; set; } = default!;
-        public DbSet<Eqptname> Eqptname { get; set; } = default!;
+        public DbSet<Eqpttype> Eqpttype { get; set; } = default!;
         public DbSet<Eqptissue> Eqptissue { get; set; } = default!;
         public DbSet<Eqptstore> Eqptstore { get; set; } = default!;
         public DbSet<Tasks> Tasks { get; set; } = default!;
+        public DbSet<BranchUsers> BranchUsers { get; set; } = default!;
+        public DbSet<Eqptcondition> Eqptcondition { get; set; } = default!;
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Eqptstore>()
-                .HasOne(e => e.Eqptname)
+                .HasOne(e => e.Eqpttype)
                 .WithMany()  // Adjust this as needed
-                .HasForeignKey(e => e.eqptid);
+                .HasForeignKey(e => e.Eqptid);
+
+
+
+            modelBuilder.Entity<Tasks>()
+       .HasOne(t => t.BranchUsers)
+       .WithMany()
+       .HasForeignKey(t => t.Assignedid);
+
+            modelBuilder.Entity<Tasks>()
+                .HasOne(t => t.Branch)
+                .WithMany()
+                .HasForeignKey(t => t.Branchid);
+
+
+
         }
 
         //public virtual DbSet<Color> Colors { get; set; } = null!;
