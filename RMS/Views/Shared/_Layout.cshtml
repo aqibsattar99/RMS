@@ -113,20 +113,25 @@
             });
 
             // Equipment dropdown filter
+            $('#eqptcond').on('change', function () {
+                var eqptValue = $(this).val();
+                tableeqpt.columns(5).search(eqptValue).draw(); // Filter by equipment name (4th column)
+            });
+            
+
+               // Equipment dropdown filter
             $('#eqptFilter').on('change', function () {
                 var eqptValue = $(this).val();
                 tableeqpt.columns(2).search(eqptValue).draw(); // Filter by equipment name (4th column)
             });
             
+
+
+
+
             
             $('#tbleqpt').DataTable(); // Initialize DataTable after everything is loaded
-            
-            
-            
-            
-            
-            
-            
+             
             
             $('#tbltasks').DataTable(); // Initialize DataTable after everything is loaded
 
