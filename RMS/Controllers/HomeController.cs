@@ -44,7 +44,7 @@ namespace RMS.Controllers
 
 
             ViewBag.PTasks = _context.Tasks
-                    .Where(x => x.Status == false)
+                    .Where(x => x.Status == false && x.Active == true)
                    .Count();
 
 
