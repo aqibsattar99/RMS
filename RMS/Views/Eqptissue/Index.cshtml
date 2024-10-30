@@ -1,9 +1,16 @@
 ﻿@model IEnumerable<RMS.Models.EqptissueVM>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
+@{
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+}
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <h2>Issued Equipments</h2>
-        <a asp-action="Create" class="btn btn-primary">Create New</a>
+        @if (role != "Officer")
+        {
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        }
     </div>
 
     <!-- Dropdown filters -->
@@ -81,9 +88,15 @@
                         <td>@item.Condition</td>
                         <td>@item.Issuevoucher</td>
                         <td>
-                            <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+
                             <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            @if (role != "Officer")
+                            {
+                                <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            }
+                          
+                          
                         </td>
                     </tr>
                 }

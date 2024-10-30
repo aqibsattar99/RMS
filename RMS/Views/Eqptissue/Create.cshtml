@@ -20,7 +20,7 @@
                                 
                                 <div class="mb-3">
                                     <label asp-for="Date" class="form-label">Date</label>
-                                    <input asp-for="Date" class="form-control" />
+                                    <input asp-for="Date" class="form-control" required />
                                     <span asp-validation-for="Date" class="text-danger"></span>
                                 </div>
                             
@@ -30,7 +30,7 @@
 
                                 <div class="mb-3">
                                     <label for="EqptId" class="form-label">Equipment</label>
-                                    <select class="form-control" id="EqptId" name="EqptId">
+                                    <select class="form-control" id="EqptId" name="EqptId" required>
                                         @foreach (var eqpt in ViewBag.Eqpt)
                                         {
                                             <option value="@eqpt.Id">@eqpt.Name </option>
@@ -44,7 +44,7 @@
 
                                 <div class="mb-3">
                                     <label asp-for="Eqptname" class="form-label">Equipment Name</label>
-                                    <input asp-for="Eqptname" class="form-control" />
+                                    <input asp-for="Eqptname" class="form-control" required />
                                     <span asp-validation-for="Eqptname" class="text-danger"></span>
                                 </div>
                             
@@ -54,7 +54,7 @@
 
                                 <div class="mb-3">
                                     <label asp-for="Qty" class="form-label">Quantity</label>
-                                    <input asp-for="Qty" class="form-control" />
+                                    <input asp-for="Qty" class="form-control" required />
                                     <span asp-validation-for="Qty" class="text-danger"></span>
                                 </div>
                             
@@ -65,7 +65,8 @@
 
                                 <div class="mb-3">
                                     <label for="branchid" class="form-label">Branch</label>
-                                    <select class="form-control" id="branchid" name="branchid">
+                                    <select class="form-control" id="branchid" name="branchid" required >
+                                        <option value="">Select</option>
                                         @foreach (var B in ViewBag.Branch)
                                         {
                                             <option value="@B.Id">@B.Name</option>
@@ -83,8 +84,8 @@
 
 
                                     <label class="form-label">Condition</label>
-                                    <select class="form-control" id="Conditionid" name="Conditionid">
-
+                                    <select class="form-control" id="Conditionid" name="Conditionid" required >
+                                        <option value="">Select</option>
                                         @foreach (var C in ViewBag.Eqptconditions)
                                             {
                                             <option value="@C.Id">@C.Condition</option>
@@ -104,7 +105,7 @@
 
                                    
                                     <label class="form-label">Issue To</label>
-                                    <input class="form-control" id="Issueto" name="Issueto" />
+                                    <input class="form-control" id="Issueto" name="Issueto" required />
                                   
 
                                 </div>
@@ -118,7 +119,7 @@
 
 
                                     <label class="form-label">Issue Voucher</label>
-                                    <input class="form-control" id="Issuevoucher" name="Issuevoucher" />
+                                    <input class="form-control" id="Issuevoucher" name="Issuevoucher" required />
                                   
 
                                 </div>
@@ -130,7 +131,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Details/Specifications</label>
                     
-                                    <textarea class="form-control" name="Details"></textarea>
+                                    <textarea class="form-control" name="Details" required></textarea>
                                     
                                 </div>
 

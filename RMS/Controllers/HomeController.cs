@@ -18,6 +18,21 @@ namespace RMS.Controllers
         public IActionResult Index()
         {
 
+            // Check session
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
+            {
+                return RedirectToAction("Index", "Account");
+            }
+
+            // Get Values Using Session
+            var name = HttpContext.Session.GetString("Name");
+            var desig = HttpContext.Session.GetString("Designation");
+            ViewData["name"] = name;
+            ViewData["desig"] = desig;
+
+
+
+
             ViewBag.Branches = _context.Branch
                     .Where(x => x.Active == true)
                     .Count();
@@ -42,7 +57,7 @@ namespace RMS.Controllers
                            Id = t.Id,
                            Branch = t.Branch != null ? t.Branch.Name : "", // Handle null Branch
                            Eqptrepair = t.Eqptrepair,
-                           Assigned = t.BranchUsers != null ? t.BranchUsers.name : "", // Handle null BranchUsers
+                           Assigned = t.BranchUsers != null ? t.BranchUsers.Name : "", // Handle null BranchUsers
                            Assigndate = t.Assigndate,
                            Problem = t.Problem,
                            Status = t.Status,

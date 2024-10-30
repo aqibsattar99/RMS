@@ -21,7 +21,11 @@ namespace RMS.Controllers
 
         // GET: Tasks
         public async Task<IActionResult> Index()
-        {
+        {  // Check session
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
+            {
+                return RedirectToAction("Index", "Account");
+            }
             var data = await _context.Tasks.Include(t => t.Branch) // Include Branch relationship
                     .Include(t => t.BranchUsers) // Include BranchUsers relationship
                   .Where(t=> t.Active == true)
@@ -30,7 +34,7 @@ namespace RMS.Controllers
                         Id = t.Id,
                         Branch = t.Branch != null ? t.Branch.Name : "", // Handle null Branch
                         Eqptrepair = t.Eqptrepair,
-                        Assigned = t.BranchUsers != null ? t.BranchUsers.name : "", // Handle null BranchUsers
+                        Assigned = t.BranchUsers != null ? t.BranchUsers.Name : "", // Handle null BranchUsers
                         Assigndate = t.Assigndate,
                         Problem = t.Problem,
                         Status = t.Status,
@@ -122,7 +126,7 @@ namespace RMS.Controllers
                        Id = t.Id,
                        Branch = t.Branch != null ? t.Branch.Name : "", // Handle null Branch
                        Eqptrepair = t.Eqptrepair,
-                       Assigned = t.BranchUsers != null ? t.BranchUsers.name : "", // Handle null BranchUsers
+                       Assigned = t.BranchUsers != null ? t.BranchUsers.Name : "", // Handle null BranchUsers
                        Assigndate = t.Assigndate,
                        Problem = t.Problem,
                        Status = t.Status,
@@ -145,7 +149,7 @@ namespace RMS.Controllers
         public IActionResult Create()
         {
             ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
-            ViewBag.BranchUsers = _context.BranchUsers.Where(x => x.active == true).ToList();
+            ViewBag.BranchUsers = _context.BranchUsers.Where(x => x.Active == true).ToList();
             return View();
         }
 
@@ -172,7 +176,7 @@ namespace RMS.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
-            ViewBag.BranchUsers = _context.BranchUsers.Where(x => x.active == true).ToList();
+            ViewBag.BranchUsers = _context.BranchUsers.Where(x => x.Active == true).ToList();
             if (id == null)
             {
                 return NotFound();

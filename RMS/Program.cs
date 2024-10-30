@@ -5,8 +5,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// To Get the Session Data Been Sent to Whole Website
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddControllersWithViews();
+// Add session service
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout as needed
+    options.Cookie.HttpOnly = true; // Security: Prevent client-side access to session cookie
+    options.Cookie.IsEssential = true; // Make session cookie essential
+});
+
 
 var config = builder.Configuration;
 builder.Services.AddDbContext<dbRMSContext>(options =>
@@ -32,8 +41,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Add session middleware
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Index}/{id?}");
 
 app.Run();

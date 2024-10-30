@@ -20,7 +20,11 @@ namespace RMS.Controllers
 
         // GET: Eqptissue
         public async Task<IActionResult> Index()
-        {
+        {  // Check session
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
+            {
+                return RedirectToAction("Index", "Account");
+            }
 
             ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
             ViewBag.Eqptconditions = _context.Eqptcondition.ToList();

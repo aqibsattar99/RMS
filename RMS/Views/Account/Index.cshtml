@@ -1,0 +1,102 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RMS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RMS.styles.css" asp-append-version="true" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+
+    @* Font Awsome *@
+    <link href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+
+
+
+
+
+    @* Datatables CSS & JS *@
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+
+    <style>
+        * {
+            font-family: Comfortaa !important;
+        }
+
+        .nav-link.active {
+            color: #fff !important; /* Change the color for the active link */
+            background: #000;
+            border-radius: 50px;
+            padding: 5px 15px;
+        }
+
+        #tbleqptissue thead tr {
+            font-size: 14px !important;
+        }
+
+        #tbleqptissue thead tr {
+            font-size: 14px !important;
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow">
+            <center>
+
+                <div class="card-header bg-primary text-white">
+                        <img src="~/logo.png" style="width: 100px; height:100px;" />
+                        <br/>
+                        <br/>
+                    <h4 class="mb-0">RMS Portal</h4>
+                </div>
+                    </center>
+
+                <div class="card-body">
+                    <form asp-action="">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label>Username</label>
+                            <input name="username" class="form-control" required />
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label>Password</label>
+                            <input class="form-control" name="password" required />
+                            
+                        </div>
+
+
+
+
+                        <div class="d-grid">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+                                </div>
+                               
+                            </div>
+
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

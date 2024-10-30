@@ -20,7 +20,11 @@ namespace RMS.Controllers
 
         // GET: Eqpt
         public async Task<IActionResult> Index()
-        {
+        {  // Check session
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
+            {
+                return RedirectToAction("Index", "Account");
+            }
             return View(await _context.Eqpttype.Where(x=>x.Active == true).ToListAsync());
         }
 

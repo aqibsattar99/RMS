@@ -73,6 +73,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="tasks" asp-action="Index">Branch Tasks</a>
                         </li>
 
+                           <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="account" asp-action="logout">Logout </a>
+                        </li>
+
 
                     </ul>
                 </div>
@@ -87,7 +91,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - RMS - IT BR
+            <center> &copy; 2024 - RMS - IT BR</center>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -112,6 +116,7 @@
                 tableeqpt.columns(1).search(branchValue).draw(); // Filter by branch (2nd column)
             });
 
+            
             // Equipment dropdown filter
             $('#eqptcond').on('change', function () {
                 var eqptValue = $(this).val();
@@ -119,15 +124,12 @@
             });
             
 
-               // Equipment dropdown filter
+            // Equipment dropdown filter
             $('#eqptFilter').on('change', function () {
                 var eqptValue = $(this).val();
-                tableeqpt.columns(2).search(eqptValue).draw(); // Filter by equipment name (4th column)
+                tableeqpt.columns(2).search(eqptValue).draw(); // Filter by equipment name (5th column)
             });
             
-
-
-
 
             
             $('#tbleqpt').DataTable(); // Initialize DataTable after everything is loaded

@@ -20,7 +20,11 @@ namespace RMS.Controllers
 
         // GET: Eqptstore
         public async Task<IActionResult> Index()
-        {
+        {  // Check session
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
+            {
+                return RedirectToAction("Index", "Account");
+            }
             var data = await _context.Eqptstore
                .Include(e => e.Eqpttype)
                .Where(e => e.Active == true)

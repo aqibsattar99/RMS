@@ -1,9 +1,16 @@
 ﻿@model IEnumerable<RMS.Models.TasksVM>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
+@{
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <h2>Task List</h2>
-        <a asp-action="Create" class="btn btn-primary">Create New</a>
+        @if (role != "Officer")
+        {
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        }
     </div>
 
 
@@ -91,17 +98,22 @@
                         <td>
                             @if (item.Status == false)
                             {
-                                <a class="btn btn-info btn-sm" asp-action="Complete" asp-route-id="@item.Id">✔️</a>
+                                @if (role != "Officer")
+                                {
+                                    <a class="btn btn-info btn-sm" asp-action="Complete" asp-route-id="@item.Id">✔️</a>
 
-                                <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">✏️</a>
-
+                                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">✏️</a>
+                                }
                             }
                             @if (item.Status == true)
                                 {
                                 <a class="btn btn-success btn-sm" asp-action="Details" asp-route-id="@item.Id"> 📝</a>
                                 }
-                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">🗑️</a>
-                        </td>
+                                @if (role != "Officer")
+                                {
+                                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">🗑️</a>
+                                }
+                                </td>
                     </tr>
                 }
             </tbody>
