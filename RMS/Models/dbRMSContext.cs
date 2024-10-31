@@ -21,6 +21,7 @@ namespace RMS.Models
         public DbSet<Tasks> Tasks { get; set; } = default!;
         public DbSet<BranchUsers> BranchUsers { get; set; } = default!;
         public DbSet<Eqptcondition> Eqptcondition { get; set; } = default!;
+        public DbSet<Eqptissuehistory> Eqptissuehistory { get; set; } = default!;
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

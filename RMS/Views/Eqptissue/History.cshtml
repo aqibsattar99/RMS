@@ -1,0 +1,114 @@
+﻿@model IEnumerable<RMS.Models.Eqptissuehistory>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+
+        <div class="col-md-12">
+            <h4 class="mb-0">Equipment Update History</h4><br/>
+
+        </div>
+        <div class="col-md-12">
+
+             @if (!Model.Any())
+            {
+                <div class="alert alert-warning text-center">
+                    <h5>No equipment update history found.</h5>
+                </div>
+            }
+            else
+            {
+
+            @foreach (var item in Model)
+            {
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Equipment Updated On : @item.updatedon?.ToString("dd-MMM-yyyy") </h5>
+                    </div>
+                    <div class="card-body">
+
+
+                        <div class="row">
+
+                            <div class="col-sm-4">
+                                <h6 class="text-primary">Issue Date</h6>
+                                <h6>@item.Date?.ToString("yyyy-MM-dd")</h6>
+
+                            </div>
+
+                         <div class="col-sm-4">
+                                <h6 class="text-primary">Branch</h6>
+                                <h6>@item.Branch</h6>
+
+                            </div>
+
+                         <div class="col-sm-4">
+                                <h6 class="text-primary">Eqpt Type</h6>
+                                <h6>@item.Eqpttype</h6>
+
+                            </div>
+
+                        
+
+
+                            <hr />
+
+
+                            <div class="col-sm-4">
+                                <h6 class="text-primary">Eqpt Name</h6>
+                                <h6>@item.Eqptname</h6>
+
+                            </div>
+
+                              <div class="col-sm-4">
+                                <h6 class="text-primary">Qty </h6>
+                                <h6>@item.Qty</h6>
+
+                            </div>
+
+
+                            
+                              <div class="col-sm-4">
+                                <h6 class="text-primary">Issue To </h6>
+                                <h6>@item.Issueto</h6>
+
+                            </div>
+
+                            <hr />
+                            <div class="col-sm-4">
+                                <h6 class="text-primary">Issuevoucher </h6>
+                                <h6>@item.Issuevoucher</h6>
+
+                            </div>
+
+
+                              <div class="col-sm-4">
+                                <h6 class="text-primary">Condition </h6>
+                                <h6>@item.Condition</h6>
+
+                            </div>
+                            
+                              <div class="col-sm-4">
+                                <h6 class="text-primary">Updated On </h6>
+                                <h6>@item.updatedon?.ToString("dd-MMM-yyyy")</h6>
+
+                            </div>
+
+                            <hr />
+                            <div class="col-sm-12">
+                                <h6 class="text-primary">Details </h6>
+                                <h6>@item.Details</h6>
+
+                            </div>
+                        </div>
+
+                
+                    </div>
+                </div>
+            }
+            }
+            <div class="text-center">
+                <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

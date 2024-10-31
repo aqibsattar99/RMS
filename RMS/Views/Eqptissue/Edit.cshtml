@@ -20,7 +20,10 @@
 
                                 <div class="mb-3">
                                     <label asp-for="Date" class="form-label">Date</label>
-                                    <input value="@Model.Date" class="form-control" name="Date"/>
+                                    <input class="form-control"
+                                           type="date"
+                                           name="Date"
+                                           value="@(Model.Date.HasValue ? Model.Date.Value.ToString("yyyy-MM-dd") : "")" />
                                 </div>
 
                             </div>
@@ -62,7 +65,7 @@
 
                                 <div class="mb-3">
                                     <label asp-for="Qty" class="form-label">Quantity</label>
-                                    <input value="@Model.Qty" class="form-control" name="Qty" />
+                                    <input value="@Model.Qty" class="form-control" type="number" max="1000"  name="Qty" />
                                 </div>
 
                             </div>

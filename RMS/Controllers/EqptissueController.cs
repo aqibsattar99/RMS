@@ -92,6 +92,53 @@ namespace RMS.Controllers
         }
 
 
+        // GET: Eqptissue/Details/5
+        public async Task<IActionResult> History(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+          //  var eqptissue = await _context.Eqptissue
+          //.Include(e => e.Branch)
+          //      .Include(e => e.Eqpttype)
+          //      .Where(e => e.Active == true)
+          //      .Select(e => new EqptissueVM
+          //      {
+          //          Id = e.Id,
+          //          Date = e.Date,
+          //          Branch = e.Branch.Name,
+          //          Eqpttypename = e.Eqpttype.Name,
+          //          Eqptname = e.Eqptname,
+          //          Qty = e.Qty,
+          //          Issueto = e.Issueto,
+          //          Issuevoucher = e.Issuevoucher,
+          //          Condition = e.Eqptcondition.Condition,
+          //          Details = e.Details,
+          //          Active = e.Active
+          //      })
+
+          //      .FirstOrDefaultAsync(m => m.Id == id);
+
+
+            var eqptissues = await _context.Eqptissuehistory
+   
+    .Where(e=>e.issueid == id) // Filter by issueid and active status
+    .ToListAsync(); // Get all matching records as a list
+
+
+
+
+            if (eqptissues == null)
+            {
+                return NotFound();
+            }
+
+            return View(eqptissues);
+        }
+
+
 
 
         // GET: Eqptissue/Create
@@ -179,21 +226,65 @@ namespace RMS.Controllers
         public async Task<IActionResult> Edit(Eqptissue eqptissue)
         {
            
+                if (ModelState.IsValid)
+                {
+                // Retrieve existing data from the database before updating
+                var existingEqptissue = await _context.Eqptissue
+                                                        .Include(e => e.Eqptcondition)
+                                                        .Include(e => e.Branch)
+                                                        .Include(e => e.Eqpttype)
+                                                        .FirstOrDefaultAsync(e => e.Id == eqptissue.Id);
+
+                if (existingEqptissue != null)
+                    {
+                    // Create a new instance of EqptissueHistory and copy data from existingEqptissue
+                    var eqptissueHistory = new Eqptissuehistory
+                    {
+                        issueid = existingEqptissue.Id,
+                        Date = existingEqptissue.Date,
+
+                        Eqpttype = existingEqptissue.Eqpttype?.Name, // Branch might be null, so using ?. to safely access Name
+                        Branch = existingEqptissue.Branch?.Name, // Branch might be null, so using ?. to safely access Name
+                        Eqptname = existingEqptissue.Eqptname,
+                        Qty = existingEqptissue.Qty,
+                        Issueto = existingEqptissue.Issueto,
+                        Condition = existingEqptissue.Eqptcondition?.Condition, // Check Eqptcondition is not null before accessing Condition
+                        Issuevoucher = existingEqptissue.Issuevoucher,
+                        Details = existingEqptissue.Details,
+                        updatedon = DateTime.UtcNow,
+                    };
+
+                    // Add the history record to the EqptissueHistory table
+                    _context.Eqptissuehistory.Add(eqptissueHistory);
+
+
+                    // Update fields in the original eqptissue record with new data
+                    existingEqptissue.Date = eqptissue.Date;
+                    existingEqptissue.Branchid = eqptissue.Branchid;
+                    existingEqptissue.EqptId = eqptissue.EqptId;
+                    existingEqptissue.Eqptname = eqptissue.Eqptname;
+                    existingEqptissue.Qty = eqptissue.Qty;
+                    existingEqptissue.Issueto = eqptissue.Issueto;
+                    existingEqptissue.Issuevoucher = eqptissue.Issuevoucher;
+                    existingEqptissue.Details = eqptissue.Details;
+                    existingEqptissue.Active = true; // Set Active status to true
+                    existingEqptissue.Conditionid = eqptissue.Conditionid; // Set Active status to true
+
+
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction(nameof(Index));
+
+
+                    }
+                }
+
+                return View(eqptissue);
          
 
-            if (ModelState.IsValid)
-            {
 
-               
 
-                eqptissue.Active = true;
-                _context.Update(eqptissue);
-                await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(eqptissue);
         }
 
 
