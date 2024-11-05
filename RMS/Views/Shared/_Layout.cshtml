@@ -46,6 +46,14 @@
             color: black !important;
         }
 
+        .tbody td{
+            font-size: 14px !important;
+        }
+
+        .thead th{
+            font-size: 14px !important;
+        }
+
    </style>
 
 </head>
@@ -121,7 +129,7 @@
                 tableeqpt.columns(1).search(branchValue).draw(); // Filter by branch (2nd column)
             });
 
-            
+
             // Equipment dropdown filter
             $('#eqptcond').on('change', function () {
                 var eqptValue = $(this).val();
@@ -134,6 +142,31 @@
                 var eqptValue = $(this).val();
                 tableeqpt.columns(2).search(eqptValue).draw(); // Filter by equipment name (5th column)
             });
+
+
+            // Equipment dropdown filter
+            $('#dateissue').on('change', function () {
+                var eqptValue = $(this).val();
+
+                // Check if the value is empty (date cleared)
+                if (eqptValue === '') {
+                    tableeqpt.columns().search('').draw(); // Clear all filters
+                } else {
+                    // Split the date by "-"
+                    var dateParts = eqptValue.split('-');
+
+                    // Rearrange and format the date as "DD-MM-YYYY"
+                    var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+
+                    //alert(formattedDate);
+
+                    // Filter by equipment name (assuming it's the 4th column)
+                    tableeqpt.columns(7).search(formattedDate).draw();
+                }
+            });
+
+
+
             
 
             

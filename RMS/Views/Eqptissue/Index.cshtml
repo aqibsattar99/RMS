@@ -47,12 +47,15 @@
                 }
             </select>
         </div>  
-        
-    @*     <div class="col-md-3">
-            <label for="eqptFilter" class="form-label"> &nbsp; </label>
-            <a href="#" class="btn btn-warning">Print</a>
 
-        </div> *@
+        <div class="col-md-3">
+
+            <label for="dateissue" class="form-label">Date:</label>
+            <input type="date" class="form-control" id="dateissue" />
+
+        </div>  
+        
+   
     </div>
 
 
@@ -68,6 +71,7 @@
                     <th>Qty</th>
                     <th>Condition</th>
                     <th>I/Voucher</th>
+                    <th>Date</th>
                     <th>Active</th>
                 </tr>
 
@@ -87,6 +91,7 @@
                         <td>@item.Qty</td>
                         <td>@item.Condition</td>
                         <td>@item.Issuevoucher</td>
+                        <td>@item.Date?.ToString("dd-MM-yyyy")</td>
                         <td>
 
                             <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
