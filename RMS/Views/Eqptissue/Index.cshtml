@@ -53,12 +53,19 @@
             <label for="dateissue" class="form-label">Date:</label>
             <input type="date" class="form-control" id="dateissue" />
 
-        </div>  
-        
-   
+        </div>
+
+       
+
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
 
+            <p>Total Items: <span id="itemCountField"></span></p>
+
+        </div>
+    </div>
     <div class="table-responsive mt-3">
         <table class="table table-striped table-bordered table-hover" id="tbleqptissue">
             <thead class="table-dark">
@@ -70,6 +77,7 @@
                     <th>Eqpt Name</th>
                     <th>Qty</th>
                     <th>Condition</th>
+                    <th>Issue To</th>
                     <th>I/Voucher</th>
                     <th>Date</th>
                     <th>Active</th>
@@ -90,16 +98,17 @@
                         <td>@item.Eqptname</td> 
                         <td>@item.Qty</td>
                         <td>@item.Condition</td>
+                        <td>@item.Issueto</td>
                         <td>@item.Issuevoucher</td>
                         <td>@item.Date?.ToString("dd-MM-yyyy")</td>
                         <td>
 
-                            <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a class="btn btn-warning btn-sm" asp-action="History" asp-route-id="@item.Id">History</a>
+                            <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">📓 </a>
+                            <a class="btn btn-warning btn-sm" asp-action="History" asp-route-id="@item.Id">🔁</a>
                             @if (role != "Officer")
                             {
-                                <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.Id">✏️</a>
+                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">🗑️</a>
                             }
                           
                           

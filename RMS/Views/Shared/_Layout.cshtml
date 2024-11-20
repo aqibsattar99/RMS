@@ -119,50 +119,58 @@
             $('#tblbranch').DataTable(); // Initialize DataTable after everything is loaded
             $('#tbleqptstore').DataTable(); // Initialize DataTable after everything is loaded
 
-         
+
+
+
             // Initialize the DataTable
             var tableeqpt = $('#tbleqptissue').DataTable();
 
-            // Branch dropdown filter
+            // Function to update item count
+            function updateItemCount() {
+                // Get the count of filtered and total items
+                var filteredItems = tableeqpt.rows({ filter: 'applied' }).data().length; // Only count filtered items
+                var totalItems = tableeqpt.rows().data().length; // Total items in the table
+
+                // Display filtered items count, showing "0" if no records match the filters
+                $('#itemCountField').text(filteredItems);
+            }
+
+            // Call updateItemCount on page load to set the initial count
+            updateItemCount();
+
+            // Event listeners for dropdown filters
             $('#branchFilter').on('change', function () {
                 var branchValue = $(this).val();
                 tableeqpt.columns(1).search(branchValue).draw(); // Filter by branch (2nd column)
+                updateItemCount(); // Update item count after filter
             });
 
-
-            // Equipment dropdown filter
             $('#eqptcond').on('change', function () {
                 var eqptValue = $(this).val();
-                tableeqpt.columns(5).search(eqptValue).draw(); // Filter by equipment name (4th column)
+                tableeqpt.columns(5).search(eqptValue).draw(); // Filter by equipment condition (6th column)
+                updateItemCount(); // Update item count after filter
             });
-            
 
-            // Equipment dropdown filter
             $('#eqptFilter').on('change', function () {
                 var eqptValue = $(this).val();
-                tableeqpt.columns(2).search(eqptValue).draw(); // Filter by equipment name (5th column)
+                tableeqpt.columns(2).search(eqptValue).draw(); // Filter by equipment name (3rd column)
+                updateItemCount(); // Update item count after filter
             });
 
-
-            // Equipment dropdown filter
             $('#dateissue').on('change', function () {
                 var eqptValue = $(this).val();
 
-                // Check if the value is empty (date cleared)
                 if (eqptValue === '') {
-                    tableeqpt.columns().search('').draw(); // Clear all filters
+                    tableeqpt.columns().search('').draw(); // Clear all filters if date is empty
                 } else {
-                    // Split the date by "-"
+                    // Format date to DD-MM-YYYY
                     var dateParts = eqptValue.split('-');
-
-                    // Rearrange and format the date as "DD-MM-YYYY"
                     var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
 
-                    //alert(formattedDate);
-
-                    // Filter by equipment name (assuming it's the 4th column)
-                    tableeqpt.columns(7).search(formattedDate).draw();
+                    tableeqpt.columns(8).search(formattedDate).draw(); // Filter by date (8th column)
                 }
+
+                updateItemCount(); // Update item count after filter
             });
 
 
