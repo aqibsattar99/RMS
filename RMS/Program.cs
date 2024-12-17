@@ -46,6 +46,6 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Index}/{id?}");
+    pattern: "{controller=Eqptissue}/{action=create}/{id?}");
 
 app.Run();

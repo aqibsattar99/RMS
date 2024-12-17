@@ -117,21 +117,16 @@
 
         $(document).ready(function () {
             $('#tblbranch').DataTable(); // Initialize DataTable after everything is loaded
+
             $('#tbleqptstore').DataTable(); // Initialize DataTable after everything is loaded
 
 
-
-
-            // Initialize the DataTable
             var tableeqpt = $('#tbleqptissue').DataTable();
 
             // Function to update item count
             function updateItemCount() {
-                // Get the count of filtered and total items
-                var filteredItems = tableeqpt.rows({ filter: 'applied' }).data().length; // Only count filtered items
-                var totalItems = tableeqpt.rows().data().length; // Total items in the table
-
-                // Display filtered items count, showing "0" if no records match the filters
+                var filteredItems = tableeqpt.rows({ filter: 'applied' }).count();
+                var totalItems = tableeqpt.rows().data().length;
                 $('#itemCountField').text(filteredItems);
             }
 
@@ -141,43 +136,63 @@
             // Event listeners for dropdown filters
             $('#branchFilter').on('change', function () {
                 var branchValue = $(this).val();
-                tableeqpt.columns(1).search(branchValue).draw(); // Filter by branch (2nd column)
-                updateItemCount(); // Update item count after filter
+                tableeqpt.columns(1).search(branchValue).draw();
+                updateItemCount();
             });
 
             $('#eqptcond').on('change', function () {
                 var eqptValue = $(this).val();
-                tableeqpt.columns(5).search(eqptValue).draw(); // Filter by equipment condition (6th column)
-                updateItemCount(); // Update item count after filter
+                tableeqpt.columns(5).search(eqptValue).draw();
+                updateItemCount();
             });
 
             $('#eqptFilter').on('change', function () {
                 var eqptValue = $(this).val();
-                tableeqpt.columns(2).search(eqptValue).draw(); // Filter by equipment name (3rd column)
-                updateItemCount(); // Update item count after filter
+                tableeqpt.columns(2).search(eqptValue).draw();
+                updateItemCount();
             });
 
-            $('#dateissue').on('change', function () {
-                var eqptValue = $(this).val();
+            // Date filtering
+            $('#dateissue, #dateissueto').on('change', function () {
+                var dateFrom = $('#dateissue').val();
+                var dateTo = $('#dateissueto').val();
 
-                if (eqptValue === '') {
-                    tableeqpt.columns().search('').draw(); // Clear all filters if date is empty
-                } else {
-                    // Format date to DD-MM-YYYY
-                    var dateParts = eqptValue.split('-');
-                    var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+                // Custom date filter
+                $.fn.dataTable.ext.search = []; // Clear previous filters
 
-                    tableeqpt.columns(8).search(formattedDate).draw(); // Filter by date (8th column)
+                if (dateFrom && dateTo) {
+                    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                        var tableDate = data[8]; // Adjust to match your date column (8th column)
+
+                        // Convert table date to Date object
+                        var tableDateParts = tableDate.split('-');
+                        var tableFormattedDate = new Date(
+                            tableDateParts[2],
+                            tableDateParts[1] - 1,
+                            tableDateParts[0]
+                        );
+
+                        // Convert input dates to Date objects
+                        var from = new Date(dateFrom);
+                        var to = new Date(dateTo);
+
+                        return tableFormattedDate >= from && tableFormattedDate <= to;
+                    });
                 }
 
-                updateItemCount(); // Update item count after filter
+                tableeqpt.draw(); // Redraw the table after applying date filter
+                updateItemCount(); // Update item count after redraw
             });
 
+            // Helper function to format dates
+            function formatDate(dateString) {
+                var parts = dateString.split('-');
+                return parts[2] + '-' + parts[1] + '-' + parts[0];
+            }
 
 
-            
 
-            
+
             $('#tbleqpt').DataTable(); // Initialize DataTable after everything is loaded
              
             
@@ -209,14 +224,9 @@
                 tabletaskhome.columns(1).search(branchValue).draw(); // Filter by branch (2nd column)
             });
 
-            
-
-
-
-
-          
         });
     </script>
+
     <script>
         // Get the current URL path
         const currentPath = window.location.pathname;
@@ -232,6 +242,205 @@
             }
         });
     </script>
+
+
+    <script>
+
+        // Code Equipt Issue Code
+        $(document).ready(function () {
+           
+            $('#submit-eqpt-issue').click(function (e) {
+               
+
+                const formData = {
+                    Date: $('.dateissue').val(),
+                    Issuevoucher: $('.issuevoucher').val(),
+                    Items: []
+                };
+
+                // Loop through all form field sets
+                $('.duplicable-fields-group').each(function () {
+                    formData.Items.push({
+                        EqptId: $(this).find('.eqptissueId').val(),
+                        Eqptname: $(this).find('.eqptnameissue').val(),
+                        Qty: $(this).find('.qtyissue').val(),
+                        Branchid: $(this).find('.branchissueid').val(),
+                        Conditionid: $(this).find('.conditionidissue').val(),
+                        Issueto: $(this).find('.issuetoissue').val(),
+                        Details: $(this).find('.detailsissue').val()
+                    });
+                });
+
+
+             
+
+                $.ajax({
+                    url: '/Eqptissue/Add', // Controller URL
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        if (response.message) {
+                            
+                            // Handle success
+                            handleSuccessMessage();
+
+
+
+                            //window.location.href = '/Eqptissue'; // Redirect on success
+                        } else {
+                            alert('Error : ' + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('Error: ' + xhr.responseText);
+                    }
+                });
+            });
+
+
+            // Function to reset the fields and remove duplicated groups
+            function resetDuplicableFields() {
+                // Keep the first group and remove all other duplicable groups
+                $('.duplicable-fields-group:not(:first)').remove();
+
+                // Clear all input, select, and textarea values in the first group
+                $('.duplicable-fields-group:first').find('input, select, textarea').val('');
+
+                // Re-initialize Remove button visibility
+                updateRemoveButtonVisibility();
+            }
+
+            // Call this function after the success message is received
+            function handleSuccessMessage() {
+                // Display a success message (optional)
+                alert('Data Saved Successfully!');
+
+                // Reset the fields and duplicated sections
+                resetDuplicableFields();
+            }
+
+
+            // Add new duplicable fields
+            $('#add-duplicable-field').click(function () {
+                const newGroup = $('.duplicable-fields-group:first').clone();
+                newGroup.find('input, select, textarea').val(''); // Clear input values
+                $('#duplicable-fields-section').append(newGroup);
+
+                // Update Remove button visibility for all groups
+                updateRemoveButtonVisibility();
+            });
+
+            // Remove a duplicable field
+            $(document).on('click', '.remove-field', function () {
+                if ($('.duplicable-fields-group').length > 1) {
+                    $(this).closest('.duplicable-fields-group').remove();
+                } else {
+                    alert('You must have at least one set of fields.');
+                }
+
+                // Update Remove button visibility
+                updateRemoveButtonVisibility();
+            });
+
+
+
+            // Update Remove button visibility
+            function updateRemoveButtonVisibility() {
+                const groups = $('.duplicable-fields-group');
+
+                groups.each(function (index) {
+                    if (index === 0) {
+                        // Hide Remove button for the first group
+                        $(this).find('.remove-field').hide();
+                    } else {
+                        // Show Remove button for duplicate groups
+                        $(this).find('.remove-field').show();
+                    }
+                });
+            }
+
+            // Initialize Remove button visibility on page load
+            updateRemoveButtonVisibility();
+
+
+
+        });
+ 
+    </script>
+
+
+
+    <script>
+
+        // Code Equipt Issue Code
+        $(document).ready(function () {
+
+            $('#print-issue-eqpt').click(function (e) {
+
+                var branchid     = $("#vehicleselect").val();
+                var eqptid       = $("#reportdateto").val();
+                var conditionid  = $("#reportdatefrom").val();
+                var datefrom     = $("#dateissue").val();
+                var dateto       = $("#dateissueto").val();
+
+                if (branchid == "") {
+                    branchid = 0;
+                }
+
+                if (eqptid == "") {
+                    eqptid = 0;
+                    } 
+
+
+                if (conditionid == "") {
+                    conditionid = 0;
+                        } 
+
+
+                if (datefrom == "") {
+                    datefrom = 0;
+                            } 
+
+                if (dateto == "") {
+                    dateto = 0;
+                }
+
+
+               
+                $.ajax({
+                    url: '/Eqptissue/PrintEqpt', // Controller URL
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: {
+                            branchid: branchid,
+                            eqptid: eqptid,
+                            conditionid: conditionid,
+                            datefrom: datefrom,
+                            dateto: dateto
+                    },
+                    success: function (response) {
+                        if (response.message) {
+
+                       
+                        } else {
+                            alert('Error : ' + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('Error: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+
+
+    </script>
+
+
+
+
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

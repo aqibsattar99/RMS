@@ -6,13 +6,16 @@
 }
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center">
-        <h2>Issued Equipments</h2>
-        @if (role != "Officer")
-        {
-            <a asp-action="Create" class="btn btn-primary">Create New</a>
-        }
+        <h2 class="mb-0">Issued Equipments</h2>
+        <div>
+            @if (role != "Officer")
+            {
+                <a asp-action="Create" class="btn btn-primary me-2">Create New</a>
+            }
+            <a id="print-issue-eqpt" class="btn btn-danger">Print</a>
+        </div>
     </div>
-
+    <br/>
     <!-- Dropdown filters -->
     <div class="row mb-3">
         <div class="col-md-3">
@@ -37,7 +40,7 @@
             </select>
         </div>   
         
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label for="eqptcond" class="form-label">Select Condition:</label>
             <select id="eqptcond" class="form-control">
                 <option value="">All</option>
@@ -48,21 +51,27 @@
             </select>
         </div>  
 
-        <div class="col-md-3">
+       
+         <div class="col-md-2">
 
-            <label for="dateissue" class="form-label">Date:</label>
-            <input type="date" class="form-control" id="dateissue" />
+            <label for="dateissue" class="form-label">Date To:</label>
+            <input type="date" class="form-control" id="dateissueto" />
 
         </div>
 
-       
+        <div class="col-md-2">
+
+            <label for="dateissue" class="form-label">Date From:</label>
+            <input type="date" class="form-control" id="dateissue" />
+
+        </div>
 
     </div>
 
     <div class="row">
         <div class="col-md-12">
 
-            <p>Total Items: <span id="itemCountField"></span></p>
+            <p>Total Filtered Items: <span id="itemCountField"></span></p>
 
         </div>
     </div>
@@ -100,7 +109,7 @@
                         <td>@item.Condition</td>
                         <td>@item.Issueto</td>
                         <td>@item.Issuevoucher</td>
-                        <td>@item.Date?.ToString("dd-MM-yyyy")</td>
+                        <td>@item.Date?.ToString("dd-MMM-yyyy")</td>
                         <td>
 
                             <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">📓 </a>

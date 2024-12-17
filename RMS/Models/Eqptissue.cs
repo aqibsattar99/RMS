@@ -44,6 +44,39 @@ namespace RMS.Models
         public string? Issuevoucher { get; set; }
         public string? Details { get; set; }
         public bool? Active { get; set; }
+
     }
+
+    public class EquipmentIssueRequest
+    {
+        public string Date { get; set; }
+        public string Issuevoucher { get; set; }
+        public List<EquipmentItem> Items { get; set; }
+    }
+
+    public class EquipmentItem
+    {
+        public string Branchid { get; set; }
+        public string Conditionid { get; set; }
+        public string EqptId { get; set; }
+        public string Eqptname { get; set; }
+        public string Qty { get; set; }
+        public string Issueto { get; set; }
+        public string Details { get; set; }
+    }
+
+
+
+    public class EquipmrnPrintVM
+    {
+        public string Branchid { get; set; }
+        public string Conditionid { get; set; }
+        public string EqptId { get; set; }
+       
+        public DateTime Issueto { get; set; }
+        public DateTime Details { get; set; }
+    }
+
+
 
 }

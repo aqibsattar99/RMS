@@ -13,6 +13,7 @@ namespace RMS.Models
         {
         
         }
+        public DbSet<Eqptissue> Eqptissues { get; set; }
 
         public DbSet<Branch> Branch { get; set; } = default!;
         public DbSet<Eqpttype> Eqpttype { get; set; } = default!;
