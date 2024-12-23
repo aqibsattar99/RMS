@@ -76,11 +76,11 @@
             <td style="border:0px; text-align: left;">
                 Report Period: <b>@Model.ReportPeriod</b>
             </td> 
-            
+
             <td style="border:0px; text-align: left;">
                 Total Equip : <b>@Model.Totaleqpt</b>
             </td>
-            
+
             <td style="border:0px; text-align: left;">
                 Total Qty: <b>@Model.TotalQty</b>
             </td>
@@ -112,27 +112,27 @@
                 int index = 1;
                 foreach (var item in Model.EquipmentData)
                 {
-                    <tr>
-                        <td>@index</td>
-                        <td>@item.Branch</td>
-                        <td>@item.Eqptname</td>
-                        <td>@item.Condition</td>
-                        <td>@item.Status</td>
-                        <td>@item.Date.ToString("dd-MMM-yyyy")</td>
-                        <td>@item.Qty</td>
-                        <td>@item.Issueto</td>
-                        <td>@item.Issuevoucher</td>
-                        <td>@item.Details</td>
-                    </tr>
+                            <tr>
+                                <td>@index</td>
+                                <td>@item.Branch</td>
+                                <td>@item.Eqptname</td>
+                                <td>@item.Condition</td>
+                                <td>@item.Status</td>
+                                <td>@item.Date.ToString("dd-MMM-yyyy")</td>
+                                <td>@item.Qty</td>
+                                <td>@item.Issueto</td>
+                                <td>@item.Issuevoucher</td>
+                                <td>@item.Details</td>
+                            </tr>
                     index++;
                 }
 
             }
             else
             {
-                <tr>
-                    <td colspan="9" style="text-align:center;">No data available for the selected filters.</td>
-                </tr>
+                    <tr>
+                        <td colspan="9" style="text-align:center;">No data available for the selected filters.</td>
+                    </tr>
             }
 
         </tbody>

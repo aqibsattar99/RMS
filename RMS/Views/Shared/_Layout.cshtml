@@ -293,6 +293,7 @@
                             // Handle success
                             handleSuccessMessage();
 
+                                     window.open(`/Eqptissue/PrintV/${formData.Issuevoucher}`, '_blank');
 
 
                             //window.location.href = '/Eqptissue'; // Redirect on success
@@ -381,7 +382,10 @@
 
     <script>
 
-        // Code Equipt Issue Code
+
+         
+
+        // Code Task Details Code
         $(document).ready(function () {
 
             $('#print-issue-eqpt').click(function (e) {
@@ -405,6 +409,98 @@
 
 
         });
+
+
+
+
+
+            var tabletasks = $('#tbltasks').DataTable();
+
+        // Function to update item count
+        function updateItemCount() {
+            var filteredItems = tabletasks.rows({ filter: 'applied' }).count();
+            var totalItems = tabletasks.rows().data().length;
+            $('#itemCountField').text(`${filteredItems} of ${totalItems} items`);
+        }
+
+        // Call updateItemCount on page load to set the initial count
+        updateItemCount();
+
+        // Dropdown filter for Branch
+        $('#branchFilter').on('change', function () {
+            var branchValue = $(this).val();
+            tabletasks.columns(1).search(branchValue).draw();
+            updateItemCount();
+        });
+
+        // Dropdown filter for Status
+        $('#statusFilter').on('change', function () {
+            var statusValue = $(this).val();
+            tabletasks.columns(6).search(statusValue).draw();
+            updateItemCount();
+        });
+
+        // Date filtering for the Date column (column index 4)
+        $('#taskdateissuefrom, #taskdateissueto').on('change', function () {
+            var dateFrom = $('#taskdateissuefrom').val();
+            var dateTo = $('#taskdateissueto').val();
+
+            // Custom date filter
+            $.fn.dataTable.ext.search = []; // Clear previous filters
+
+            if (dateFrom && dateTo) {
+                $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                    var tableDate = data[4]; // Adjust to match your date column (4th column)
+
+                    // Convert table date to Date object
+                    var tableDateParts = tableDate.split('-'); // Assuming 'dd-MMM-yyyy' format
+                    var tableFormattedDate = new Date(tableDateParts[2], getMonthFromName(tableDateParts[1]) - 1, tableDateParts[0]);
+
+                    // Convert input dates to Date objects
+                    var from = new Date(dateFrom);
+                    var to = new Date(dateTo);
+
+                    return tableFormattedDate >= from && tableFormattedDate <= to;
+                });
+            }
+
+            tabletasks.draw(); // Redraw the table after applying date filter
+            updateItemCount(); // Update item count after redraw
+        });
+
+        // Helper function to convert month name to a number
+        function getMonthFromName(monthName) {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return monthNames.indexOf(monthName) + 1;
+        }
+
+        // Set default date range (last 30 days)
+        const now = new Date();
+        const last30Days = new Date(now.setDate(now.getDate() - 30)).toISOString().split('T')[0];
+        const today = new Date().toISOString().split('T')[0];
+
+        $('#taskdateissuefrom').val(last30Days);
+        $('#taskdateissueto').val(today);
+
+        // Trigger the filter to apply the default range
+        $('#taskdateissuefrom, #taskdateissueto').trigger('change');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         });
 
 

@@ -201,10 +201,19 @@ namespace RMS.Controllers
                 };
 
                 _context.Eqptissue.Add(Eqptissues);
+
+
             }
 
             // Save changes to the database
             await _context.SaveChangesAsync();
+
+
+
+
+
+
+
 
             return Ok(new { message = "Data saved successfully!" });
         }
@@ -328,57 +337,7 @@ namespace RMS.Controllers
 
 
 
-        //public async Task<IActionResult> PrintV(string? id)
-        //{
-        //    var query = _context.Eqptissue
-        //                .Include(e => e.Eqpttype)
-        //                .Include(e => e.Branch)
-        //                .Include(e => e.Eqptcondition)
-        //                .Include(e => e.Status)
-        //                .AsQueryable();
-
-
-        //    query = query.Where(e => e.Issuevoucher == id);
-
-        //    var eqptIssues = query.ToList();
-
-
-        //    // Map data to the dynamic model
-        //    var model = new
-        //    {
-        //        ReportTitle = "Equipment Report",
-
-        //        EquipmentData = eqptIssues.Select(e => new
-        //        {
-        //            e.Id,
-        //            e.Date,
-        //            Branch = e.Branch?.Name,
-        //            Eqptname = e.Eqpttype?.Name,
-        //            e.Issueto,
-        //            e.Qty,
-        //            e.Issuevoucher,
-        //            Status = e.Status?.Name,
-        //            Condition = e.Eqptcondition?.Condition,
-        //            e.Details
-        //        }).ToList()
-        //    };
-
-
-
-        //    return new ViewAsPdf("~/Views/Reports/Singlevoucher.cshtml", model)
-        //    {
-        //        CustomSwitches = "--disable-smart-shrinking",
-        //        PageSize = Rotativa.AspNetCore.Options.Size.A4,
-        //        PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
-        //    };
-
-
-
-        //    // return Json(new { url = Url.Action("equipmentreport", "Reports") });
-        //}
-
-
-        public async Task<IActionResult> PrintV(string? id)
+        public async Task<IActionResult> PrintV(string? id) // here id is string and its getting voucher number instead of ID
         {
             var query = _context.Eqptissue
                         .Include(e => e.Eqpttype)
@@ -458,7 +417,7 @@ namespace RMS.Controllers
                                   ? $"{Datefrom:dd-MMM-yyyy} to {Dateto:dd-MMM-yyyy}"
                                   : "All Time";
             int Totaleqpt = query.ToList().Count();
-
+            int TotalQty = eqptIssues.Sum(e => e.Qty ?? 0);
             // Map data to the dynamic model
             var model = new
             {
@@ -467,6 +426,7 @@ namespace RMS.Controllers
                 EquipmentName = eqptName,
                 StatusName = statusName,
                 Totaleqpt = Totaleqpt,
+                TotalQty = TotalQty,
                 ConditionName = conditionName,
                 ReportPeriod = reportPeriod,
                 EquipmentData = eqptIssues.Select(e => new
@@ -487,7 +447,7 @@ namespace RMS.Controllers
             //return View("~/Views/Reports/equipmentreport.cshtml", model);
 
 
-            return new ViewAsPdf("~/Views/Reports/equipmentreport.cshtml", model)
+            return new ViewAsPdf("~/Views/Reports/Equipmentreport.cshtml", model)
             {
                 CustomSwitches = "--disable-smart-shrinking",
                 PageSize = Rotativa.AspNetCore.Options.Size.Legal,

@@ -6,17 +6,22 @@
 }
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center">
-        <h2>Task List</h2>
-        @if (role != "Officer")
-        {
-            <a asp-action="Create" class="btn btn-primary">Create New</a>
-        }
+        <h2 class="mb-0">Tasks Details</h2>
+        <div>
+            @if (role != "Officer")
+            {
+                <a asp-action="Create" class="btn btn-primary me-2">Create New</a>
+            }
+            <a id="print-tasks" class="btn btn-danger">Print</a>
+        </div>
     </div>
 
 
     <!-- Dropdown filters -->
     <div class="row mb-3">
-        <div class="col-md-3">
+        <div class="col-md-2">
+            
+            <label class="form-label">Select Branch</label>
             <select id="FilterBranch" class="form-control">
                 <option value="">Select Branch</option>
                 @foreach (var b in ViewBag.Branch)
@@ -26,7 +31,8 @@
             </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <label class="form-label">Select Status</label>
             <select id="FilterStatus" class="form-control">
                 <option value="">Select Status</option>
                 <option value="Pending">Pending</option>
@@ -34,6 +40,21 @@
                
                   
             </select>
+        </div>
+
+
+        <div class="col-md-2">
+            <label class="form-label">Date From</label>
+            <label for="dateissue" class="form-label">Date From:</label>
+            <input type="date" class="form-control" id="taskdateissuefrom" />
+
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Date To</label>
+            <label for="dateissue" class="form-label">Date To:</label>
+            <input type="date" class="form-control" id="taskdateissueto" />
+
         </div>
 
    
@@ -76,8 +97,9 @@
                         <td>@Html.DisplayFor(modelItem => item.Ionno)</td>
 
                         <!-- Display formatted completion date -->
-                      
-                        <td>@item.Assigndate</td>
+
+                        <td>@(item.Assigndate.HasValue ? item.Assigndate.Value.ToString("dd-MMM-yyyy") : "N/A")</td>
+
 
                         <!-- Display the problem description -->
                         <td>@Html.DisplayFor(modelItem => item.Problem)</td>

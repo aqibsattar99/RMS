@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using RMS.Models;
+using Rotativa.AspNetCore;
 
 namespace RMS.Controllers
 {
@@ -243,7 +244,85 @@ namespace RMS.Controllers
             return View(tasks);
         }
 
-  
+
+
+
+        //[HttpGet]
+        //public IActionResult PrintTasks(int Branchid, bool Status,DateTime Datefrom, DateTime Dateto)
+        //{
+        //    var query = _context.Tasks
+        //                        .Include(e => e.Branch)
+                                
+        //                        .AsQueryable();
+
+        //    // Filter logic
+        //    if (Branchid != 0) query = query.Where(e => e.Branchid == Branchid);
+           
+        //    if (Status != false) query = query.Where(e => e.Status == Status);
+        //    if (Datefrom != DateTime.MinValue && Dateto != DateTime.MinValue)
+        //        query = query.Where(e => e.Assigndate.HasValue >= Datefrom && e.Assigndate.HasValue <= Dateto);
+
+        //    var eqptIssues = query.ToList();
+
+        //    //// Fallback to "All" if filters are empty
+        //    //string branchName = Branchid == 0 ? "All" : _context.Branch.FirstOrDefault(b => b.Id == Branchid)?.Name ?? "Unknown";
+        //    //string eqptName = EqptId == 0 ? "All" : _context.Eqpttype.FirstOrDefault(e => e.Id == EqptId)?.Name ?? "Unknown";
+        //    //string statusName = Statusid == 0 ? "All" : _context.Status.FirstOrDefault(e => e.Id == Statusid)?.Name ?? "Unknown";
+        //    //string conditionName = Conditionid == 0 ? "All" : _context.Eqptcondition.FirstOrDefault(c => c.Id == Conditionid)?.Condition ?? "Unknown";
+        //    //string reportPeriod = Datefrom != DateTime.MinValue && Dateto != DateTime.MinValue
+        //    //                      ? $"{Datefrom:dd-MMM-yyyy} to {Dateto:dd-MMM-yyyy}"
+        //    //                      : "All Time";
+        //    //int Totaleqpt = query.ToList().Count();
+        //    //int TotalQty = eqptIssues.Sum(e => e.Qty ?? 0);
+        //    //// Map data to the dynamic model
+        //    //var model = new
+        //    //{
+        //    //    ReportTitle = "Equipment Report",
+        //    //    BranchName = branchName,
+        //    //    EquipmentName = eqptName,
+        //    //    StatusName = statusName,
+        //    //    Totaleqpt = Totaleqpt,
+        //    //    TotalQty = TotalQty,
+        //    //    ConditionName = conditionName,
+        //    //    ReportPeriod = reportPeriod,
+        //    //    EquipmentData = eqptIssues.Select(e => new
+        //    //    {
+        //    //        e.Id,
+        //    //        e.Date,
+        //    //        Branch = e.Branch?.Name,
+        //    //        Eqptname = e.Eqpttype?.Name,
+        //    //        e.Issueto,
+        //    //        e.Qty,
+        //    //        e.Issuevoucher,
+        //    //        Status = e.Status?.Name,
+        //    //        Condition = e.Eqptcondition?.Condition,
+        //    //        e.Details
+        //    //    }).ToList()
+        //    //};
+
+        //    ////return View("~/Views/Reports/equipmentreport.cshtml", model);
+
+
+        //    //return new ViewAsPdf("~/Views/Reports/equipmentreport.cshtml", model)
+        //    //{
+        //    //    CustomSwitches = "--disable-smart-shrinking",
+        //    //    PageSize = Rotativa.AspNetCore.Options.Size.Legal,
+        //    //    PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
+        //    //};
+
+
+
+        //    // return Json(new { url = Url.Action("equipmentreport", "Reports") });
+        //}
+
+
+
+
+
+
+
+
+
 
 
 
