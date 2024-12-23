@@ -16,6 +16,7 @@ namespace RMS.Models
         public string? Eqptname { get; set; }        
         public int? Qty { get; set; }
         public string? Issueto { get; set; }
+        public string? Status { get; set; }
         public string? Condition { get; set; }
         public string? Issuevoucher { get; set; }
         public string? Details { get; set; }

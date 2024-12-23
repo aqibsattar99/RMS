@@ -11,6 +11,7 @@ namespace RMS.Models
         public DateTime? Date { get; set; }
         public int? Branchid { get; set; }
         public int? EqptId { get; set; }
+        public int? StatusId { get; set; }
         public string? Eqptname { get; set; }        
         public int? Qty { get; set; }
         public string? Issueto { get; set; }
@@ -27,6 +28,11 @@ namespace RMS.Models
 
         [ForeignKey("Conditionid")]  // Foreign key for Eqpttype
         public virtual Eqptcondition? Eqptcondition { get; set; }
+
+        [ForeignKey("StatusId")]  // Foreign key for Eqpttype
+        public virtual Status? Status { get; set; }
+
+
     }
 
 
@@ -38,6 +44,8 @@ namespace RMS.Models
         public string? Branch { get; set; }
         public string? Eqpttypename { get; set; }
         public string? Eqptname { get; set; }
+        
+        public string? Status { get; set; }
         public int? Qty { get; set; }
         public string? Issueto { get; set; }
         public string? Condition { get; set; }
@@ -51,12 +59,14 @@ namespace RMS.Models
     {
         public string Date { get; set; }
         public string Issuevoucher { get; set; }
+        public int Branchid { get; set; }
         public List<EquipmentItem> Items { get; set; }
     }
 
     public class EquipmentItem
     {
-        public string Branchid { get; set; }
+        
+        public string StatusId { get; set; }
         public string Conditionid { get; set; }
         public string EqptId { get; set; }
         public string Eqptname { get; set; }
@@ -67,14 +77,14 @@ namespace RMS.Models
 
 
 
-    public class EquipmrnPrintVM
+    public class EquipPrintVM
     {
-        public string Branchid { get; set; }
-        public string Conditionid { get; set; }
-        public string EqptId { get; set; }
+        public string? Branchid { get; set; }
+        public string? Conditionid { get; set; }
+        public string? EqptId { get; set; }
        
-        public DateTime Issueto { get; set; }
-        public DateTime Details { get; set; }
+        public DateTime? Dateto { get; set; }
+        public DateTime? Datefrom { get; set; }
     }
 
 

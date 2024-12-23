@@ -1,0 +1,173 @@
+﻿@model dynamic
+@{
+    Layout = null; // Disable layout for this view
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .report-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .totals {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .header-table td {
+            border: 0px;
+            text-align: left;
+        }
+
+        .header-table .center {
+            text-align: center;
+        }
+
+        .header-table .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <p class="report-title" style="font-size: 25px">Issue/Receipt Voucher</p>
+    <p class="report-title" style="font-size: 20px"> IT Branch</p>
+
+    <!-- Report Header with Branch, Equipment, Condition, Period, and Date Printed -->
+    <table class="header-table" style="border:0px;">
+        <tr>
+            <td style="border:0px; text-align: left; width:50% important;">
+                IV No: <b>@Model.IVNo</b>
+            </td>
+            <td style="border:0px; text-align: left;width:50% important;">
+                RV No : _____________________
+            </td>
+
+        </tr>
+
+
+
+        <tr>
+            <td style="border:0px; text-align: left; width:50% important;">
+                Issuing Branch/Dte: <b>@Model.IssuingBranch</b>
+            </td>
+            <td style="border:0px; text-align: left;width:50% important;">
+                Receving Branch/Dte : <b>@Model.ReceivingBranch</b>
+            </td>
+        </tr>
+        <tr>
+            <td style="border:0px; text-align: left;width:50% important;">
+                Date Issue : <b>@Model.DateIssue </b>
+            </td>
+       
+            <td style="border:0px; text-align: left;width:50% important;">
+                Date Recevied : _____________________
+            </td>
+        </tr>
+
+    </table>
+    <br/>
+    <br/>
+
+
+   
+    <table>
+        <thead>
+            <tr>
+                <th>Ser No.</th>
+                <th>Equipment</th>
+                <th>Condition</th>
+                <th>Qty</th>
+                <th>Issued To</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.EquipmentData.Count > 0)
+            {
+                int index = 1;
+                foreach (var item in Model.EquipmentData)
+                {
+                    <tr>
+                        <td>@index</td>
+                       
+                        <td>
+                            @item.Eqptname <br/>
+                            @item.Details    
+                        </td>
+                        <td>@item.Condition</td>
+                       
+                        <td>@item.Qty</td>
+                        <td>@item.Issueto</td>
+               
+                       
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" style="text-align:center;">No data available for the selected filters.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <br/>
+
+    <table class="header-table" style="border:0px;">
+        <tr>
+            <td style="border:0px; text-align: left;">
+                <b>Issuing Authority</b>    <br />
+                <p>Sig:______________________________</p>
+                <p>Name:  Sibtain Abid Cheema</p>
+                <p>Appt:  DD IT</p>
+                <p>Date:  @Model.DateIssue </p>
+            </td>
+            <td style="border:0px; text-align: left;">
+                <b>Receving Authority</b>    <br />
+                <p>Sig : ______________________________</p>
+                <p>Name: ______________________________</p>
+                <p>Appt: ______________________________</p>
+                <p>Date: @Model.DateIssue </p>
+            </td>
+
+        </tr>
+
+
+
+
+    </table>
+
+
+
+
+
+  
+</body>
+</html>

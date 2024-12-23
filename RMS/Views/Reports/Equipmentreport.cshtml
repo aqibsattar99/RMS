@@ -1,0 +1,132 @@
+﻿@model dynamic
+@{
+    Layout = null; // Disable layout for this view
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Model.ReportTitle</title>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .report-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .totals {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .header-table td {
+            border: 0px;
+            text-align: left;
+        }
+
+        .header-table .center {
+            text-align: center;
+        }
+
+        .header-table .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-title">@Model.ReportTitle</div>
+
+    <!-- Report Header with Branch, Equipment, Condition, Period, and Date Printed -->
+    <table class="header-table" style="border:0px;">
+        <tr>
+            <td style="border:0px; text-align: left;">
+                Branch: <b>@(Model.BranchName ?? "All")</b>
+            </td>
+            <td style="border:0px; text-align: left;">
+                Equipment: <b>@(Model.EquipmentName ?? "All")</b>
+            </td>
+            <td style="border:0px; text-align: left;">
+                Condition: <b>@(Model.ConditionName ?? "All")</b>
+            </td> 
+            <td style="border:0px; text-align: left;">
+                Status: <b>@(Model.StatusName ?? "All")</b>
+            </td>
+            <td style="border:0px; text-align: left;">
+                Report Period: <b>@Model.ReportPeriod</b>
+            </td>
+            <td class="right" style="border:0px;">
+                Date Printed On: <b>@DateTime.Now.ToString("dd-MMM-yyyy")</b>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Equipment Issue Data Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Ser No.</th>
+                <th>Branch</th>
+                <th>Equipment</th>
+                <th>Condition</th>
+                <th>Status</th>
+                <th>Issue Date</th>
+                <th>Quantity</th>
+                <th>Issued To</th>
+                <th>Issue Voucher</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.EquipmentData.Count > 0)
+            {
+                int index = 1;
+                foreach (var item in Model.EquipmentData)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.Branch</td>
+                        <td>@item.Eqptname</td>
+                        <td>@item.Condition</td>
+                        <td>@item.Status</td>
+                        <td>@item.Date.ToString("dd-MMM-yyyy")</td>
+                        <td>@item.Qty</td>
+                        <td>@item.Issueto</td>
+                        <td>@item.Issuevoucher</td>
+                        <td>@item.Details</td>
+                    </tr>
+                    index++;
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" style="text-align:center;">No data available for the selected filters.</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</body>
+</html>

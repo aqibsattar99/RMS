@@ -15,7 +15,7 @@
 
                         <div class="row">
                             <!-- Left column (first set of form fields) -->
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 
                                 <div class="mb-3">
                                     <label asp-for="Date" class="form-label">Date</label>
@@ -26,7 +26,7 @@
                             </div>
 
 
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
 
@@ -35,7 +35,23 @@
 
                                 </div>
                             </div>
+                        
+                    <div class="col-sm-4">
+
+                        <div class="mb-3">
+                            <label for="branchid" class="form-label">Branch</label>
+                            <select class="form-control branchissueid" required>
+                                <option value="">Select</option>
+                                @foreach (var B in ViewBag.Branch)
+                                {
+                                    <option value="@B.Id">@B.Name</option>
+                                }
+                            </select>
                         </div>
+
+                    </div>
+                    </div>
+
                         <hr />
 
                         <!-- Duplicable Fields Section -->
@@ -45,11 +61,12 @@
 
                                     <!--Duplicate Fields-->
 
-                                    <div class="col-sm-4">
+                                <div class="col-sm-4">
 
                                         <div class="mb-3">
                                             <label for="EqptId" class="form-label">Equipment</label>
                                             <select class="form-control eqptissueId" required>
+                                            <option value="">Select</option>
                                                 @foreach (var eqpt in ViewBag.Eqpt)
                                                 {
                                                     <option value="@eqpt.Id">@eqpt.Name </option>
@@ -59,7 +76,7 @@
 
                                     </div>
 
-                                    <div class="col-sm-4">
+                                <div class="col-sm-4">
 
                                         <div class="mb-3">
                                             <label asp-for="Eqptname" class="form-label">Equipment Name</label>
@@ -69,7 +86,7 @@
 
                                     </div>
 
-                                    <div class="col-sm-4">
+                                <div class="col-sm-4">
 
                                         <div class="mb-3">
                                             <label asp-for="Qty" class="form-label">Quantity</label>
@@ -79,21 +96,26 @@
 
                                     </div>
 
+                                <div class="col-sm-4">
 
-                                    <div class="col-sm-4">
-
-                                        <div class="mb-3">
-                                            <label for="branchid" class="form-label">Branch</label>
-                                            <select class="form-control branchissueid" required>
-                                                <option value="">Select</option>
-                                                @foreach (var B in ViewBag.Branch)
-                                                {
-                                                    <option value="@B.Id">@B.Name</option>
-                                                }
-                                            </select>
-                                        </div>
-
+                                    <div class="mb-3">
+                                        <label for="EqptId" class="form-label">Status</label>
+                                        <select class="form-control eqptstatusId" required>
+                                            <option value="">Select</option>
+                                            @foreach (var eqptstatus in ViewBag.Status)
+                                            {
+                                                <option value="@eqptstatus.Id">@eqptstatus.Name </option>
+                                            }
+                                        </select>
                                     </div>
+
+                                </div>
+
+
+
+
+
+                                
 
 
 
@@ -117,6 +139,8 @@
                                         </div>
 
                                     </div>
+
+
 
                                     <div class="col-sm-4">
 

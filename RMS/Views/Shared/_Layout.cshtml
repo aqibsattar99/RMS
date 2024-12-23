@@ -139,6 +139,12 @@
                 tableeqpt.columns(1).search(branchValue).draw();
                 updateItemCount();
             });
+             // Event listeners for dropdown filters
+            $('#eqptstatus').on('change', function () {
+                var eqptstatus = $(this).val();
+                tableeqpt.columns(6).search(eqptstatus).draw();
+                updateItemCount();
+            });
 
             $('#eqptcond').on('change', function () {
                 var eqptValue = $(this).val();
@@ -255,6 +261,7 @@
                 const formData = {
                     Date: $('.dateissue').val(),
                     Issuevoucher: $('.issuevoucher').val(),
+                    Branchid: $('.branchissueid').val(),
                     Items: []
                 };
 
@@ -263,8 +270,9 @@
                     formData.Items.push({
                         EqptId: $(this).find('.eqptissueId').val(),
                         Eqptname: $(this).find('.eqptnameissue').val(),
+                        StatusId: $(this).find('.eqptstatusId').val(),
                         Qty: $(this).find('.qtyissue').val(),
-                        Branchid: $(this).find('.branchissueid').val(),
+                        //Branchid: $(this).find('.branchissueid').val(),
                         Conditionid: $(this).find('.conditionidissue').val(),
                         Issueto: $(this).find('.issuetoissue').val(),
                         Details: $(this).find('.detailsissue').val()
@@ -378,60 +386,25 @@
 
             $('#print-issue-eqpt').click(function (e) {
 
-                var branchid     = $("#vehicleselect").val();
-                var eqptid       = $("#reportdateto").val();
-                var conditionid  = $("#reportdatefrom").val();
-                var datefrom     = $("#dateissue").val();
-                var dateto       = $("#dateissueto").val();
+                // Get filter values
+                var branchid = $("#branchFilter").find(":selected").attr("idval");
+                
+                var eqptid = $("#eqptFilter").find(":selected").attr("idval");
+                var conditionid = $("#eqptcond").find(":selected").attr("idval");
+                var eqptstatus = $("#eqptstatus").find(":selected").attr("idval");
 
-                if (branchid == "") {
-                    branchid = 0;
-                }
+                var datefrom = $("#dateissue").val();
+                var dateto = $("#dateissueto").val();
 
-                if (eqptid == "") {
-                    eqptid = 0;
-                    } 
+                // Construct the URL with query parameters
+                var url = `/Eqptissue/PrintEqpt?Branchid=${branchid}&EqptId=${eqptid}&Conditionid=${conditionid}&Statusid=${eqptstatus}&Datefrom=${datefrom}&Dateto=${dateto}`;
 
-
-                if (conditionid == "") {
-                    conditionid = 0;
-                        } 
+                // Open the URL in a new tab
+                window.open(url, '_blank');
 
 
-                if (datefrom == "") {
-                    datefrom = 0;
-                            } 
 
-                if (dateto == "") {
-                    dateto = 0;
-                }
-
-
-               
-                $.ajax({
-                    url: '/Eqptissue/PrintEqpt', // Controller URL
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: {
-                            branchid: branchid,
-                            eqptid: eqptid,
-                            conditionid: conditionid,
-                            datefrom: datefrom,
-                            dateto: dateto
-                    },
-                    success: function (response) {
-                        if (response.message) {
-
-                       
-                        } else {
-                            alert('Error : ' + response.message);
-                        }
-                    },
-                    error: function (xhr) {
-                        alert('Error: ' + xhr.responseText);
-                    }
-                });
-            });
+        });
         });
 
 

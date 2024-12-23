@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Mono.TextTemplating;
 using RMS.Models;
+using Rotativa.AspNetCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RMS.Controllers
 {
@@ -19,21 +22,24 @@ namespace RMS.Controllers
             _context = context;
         }
 
-        // GET: Eqptissue
+        // Index Page
         public async Task<IActionResult> Index()
-        {  // Check session
-            //if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
-            //{
-            //    return RedirectToAction("Index", "Account");
-            //}
+        {
+            //Check session
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
+            {
+                return RedirectToAction("Index", "Account");
+            }
 
             ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
             ViewBag.Eqptconditions = _context.Eqptcondition.ToList();
             ViewBag.Eqpttype = _context.Eqpttype.Where(x => x.Active == true).ToList();
+            ViewBag.Status = _context.Status.ToList();
 
             var data = await _context.Eqptissue
                  .Include(e => e.Branch)
                 .Include(e => e.Eqpttype)
+                .Include(e => e.Status)
                 .Where(e => e.Active == true)
                 .Select(e => new EqptissueVM
                 {
@@ -45,6 +51,7 @@ namespace RMS.Controllers
                     Eqptname = e.Eqptname,
                     Qty = e.Qty,
                     Issueto = e.Issueto,
+                    Status = e.Status.Name,
                     Issuevoucher = e.Issuevoucher,
                     Condition = e.Eqptcondition.Condition,
                     Details = e.Details,
@@ -56,7 +63,16 @@ namespace RMS.Controllers
         }
 
 
-        // GET: Eqptissue/Details/5
+
+
+
+
+
+
+
+
+
+        // Single Eqptissue Details
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -67,6 +83,7 @@ namespace RMS.Controllers
             var eqptissue = await _context.Eqptissue
           .Include(e => e.Branch)
                 .Include(e => e.Eqpttype)
+                .Include(e => e.Status)
                 .Where(e => e.Active == true)
                 .Select(e => new EqptissueVM
                 {
@@ -79,6 +96,7 @@ namespace RMS.Controllers
                     Issueto = e.Issueto,
                     Issuevoucher = e.Issuevoucher,
                     Condition = e.Eqptcondition.Condition,
+                    Status = e.Status.Name,
                     Details = e.Details,
                     Active = e.Active
                 })
@@ -93,7 +111,16 @@ namespace RMS.Controllers
         }
 
 
-        // GET: Eqptissue/Details/5
+
+
+
+
+
+
+
+
+
+        // Single Eqptissue History
         public async Task<IActionResult> History(int? id)
         {
             if (id == null)
@@ -101,35 +128,9 @@ namespace RMS.Controllers
                 return NotFound();
             }
 
-            //  var eqptissue = await _context.Eqptissue
-            //.Include(e => e.Branch)
-            //      .Include(e => e.Eqpttype)
-            //      .Where(e => e.Active == true)
-            //      .Select(e => new EqptissueVM
-            //      {
-            //          Id = e.Id,
-            //          Date = e.Date,
-            //          Branch = e.Branch.Name,
-            //          Eqpttypename = e.Eqpttype.Name,
-            //          Eqptname = e.Eqptname,
-            //          Qty = e.Qty,
-            //          Issueto = e.Issueto,
-            //          Issuevoucher = e.Issuevoucher,
-            //          Condition = e.Eqptcondition.Condition,
-            //          Details = e.Details,
-            //          Active = e.Active
-            //      })
-
-            //      .FirstOrDefaultAsync(m => m.Id == id);
-
-
             var eqptissues = await _context.Eqptissuehistory
-
-    .Where(e => e.issueid == id) // Filter by issueid and active status
-    .ToListAsync(); // Get all matching records as a list
-
-
-
+                .Where(e => e.issueid == id) // Filter by issueid and active status
+                .ToListAsync(); // Get all matching records as a list
 
             if (eqptissues == null)
             {
@@ -142,15 +143,70 @@ namespace RMS.Controllers
 
 
 
-        // GET: Eqptissue/Create
+
+
+
+
+
+
+
+        // Eqptissue Create Page
         public IActionResult Create()
         {
             ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
             ViewBag.Eqptconditions = _context.Eqptcondition.ToList();
             ViewBag.Eqpt = _context.Eqpttype.Where(x => x.Active == true).ToList();
-
+            ViewBag.Status = _context.Status.ToList();
 
             return View();
+        }
+
+        // Eqptissue Add Data
+        public async Task<IActionResult> Add([FromBody] EquipmentIssueRequest request)
+        {
+            if (request == null || request.Items == null || !request.Items.Any())
+            {
+                return BadRequest("Invalid or empty data.");
+            }
+
+            // Attempt to parse Date once for all items
+            DateTime parsedDate;
+            if (!DateTime.TryParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+            {
+                return BadRequest("Invalid date format. Please use 'yyyy-MM-dd'.");
+            }
+
+
+            // Loop through each item and save it
+            foreach (var item in request.Items)
+            {
+                var Eqptissues = new Eqptissue // Assuming your entity name
+                {
+                    Date = parsedDate,               // Static value from parent
+                    Issuevoucher = request.Issuevoucher, // Static value from parent
+                    Branchid = request.Branchid, // Static value from parent
+
+                    //Branchid = int.TryParse(item.Branchid, out var branchId) ? branchId : (int?)null,
+                    Conditionid = int.TryParse(item.Conditionid, out var conditionId) ? conditionId : (int?)null,
+                    EqptId = int.TryParse(item.EqptId, out var eqptId) ? eqptId : (int?)null,
+                    // 1. Issued
+                    // 2. Stocked
+                    // 3. Condenmation
+                    StatusId = 1,
+                    Eqptname = item.Eqptname,
+                    Qty = int.TryParse(item.Qty, out var qty) ? qty : 0, // Convert to integer
+                    Issueto = item.Issueto,
+                    Details = item.Details,
+                    Active = true // Assuming Active flag
+                };
+
+                _context.Eqptissue.Add(Eqptissues);
+            }
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Data saved successfully!" });
         }
 
 
@@ -162,14 +218,15 @@ namespace RMS.Controllers
 
 
 
-        // GET: Eqptissue/Edit/5
+
+        // Eqptissue Edit Page View Data
         public async Task<IActionResult> Edit(int? id)
         {
 
             ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
             ViewBag.Eqptconditions = _context.Eqptcondition.ToList();
             ViewBag.Eqpt = _context.Eqpttype.Where(x => x.Active == true).ToList();
-
+            ViewBag.Status = _context.Status.ToList();
             if (id == null)
             {
                 return NotFound();
@@ -179,6 +236,7 @@ namespace RMS.Controllers
             var Eqptissue = await _context.Eqptissue
                                             .Include(e => e.Eqpttype)
                                             .Include(e => e.Branch)
+                                            .Include(e => e.Status)
                                             .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Eqptissue == null)
@@ -186,36 +244,27 @@ namespace RMS.Controllers
                 return NotFound();
             }
 
-            // Map the entity to the ViewModel
-            var eqptissuevm = new EqptissueVM
-            {
-                Id = Eqptissue.Id,
-                Date = Eqptissue.Date,
-                Branch = Eqptissue.Branch?.Name,
-                Eqptname = Eqptissue.Eqpttype?.Name, // Assuming Eqptname has a property 'Name'
-                Qty = Eqptissue.Qty,
-                Details = Eqptissue.Details
-            };
-
             return View(Eqptissue);
         }
 
-
-
-
-
+        // Eqptissue Edit Data Submission
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Eqptissue eqptissue)
         {
 
-            if (ModelState.IsValid)
-            {
+            ViewBag.Branch = _context.Branch.Where(x => x.Active == true).ToList();
+            ViewBag.Eqptconditions = _context.Eqptcondition.ToList();
+            ViewBag.Eqpt = _context.Eqpttype.Where(x => x.Active == true).ToList();
+            ViewBag.Status = _context.Status.ToList();
+
+            
                 // Retrieve existing data from the database before updating
                 var existingEqptissue = await _context.Eqptissue
                                                         .Include(e => e.Eqptcondition)
                                                         .Include(e => e.Branch)
                                                         .Include(e => e.Eqpttype)
+                                                        .Include(e => e.Status)
                                                         .FirstOrDefaultAsync(e => e.Id == eqptissue.Id);
 
                 if (existingEqptissue != null)
@@ -230,6 +279,8 @@ namespace RMS.Controllers
                         Branch = existingEqptissue.Branch?.Name, // Branch might be null, so using ?. to safely access Name
                         Eqptname = existingEqptissue.Eqptname,
                         Qty = existingEqptissue.Qty,
+                        Status = existingEqptissue.Status?.Name ?? "null",
+
                         Issueto = existingEqptissue.Issueto,
                         Condition = existingEqptissue.Eqptcondition?.Condition, // Check Eqptcondition is not null before accessing Condition
                         Issuevoucher = existingEqptissue.Issuevoucher,
@@ -250,6 +301,7 @@ namespace RMS.Controllers
                     existingEqptissue.Issueto = eqptissue.Issueto;
                     existingEqptissue.Issuevoucher = eqptissue.Issuevoucher;
                     existingEqptissue.Details = eqptissue.Details;
+                    existingEqptissue.StatusId = eqptissue.StatusId;
                     existingEqptissue.Active = true; // Set Active status to true
                     existingEqptissue.Conditionid = eqptissue.Conditionid; // Set Active status to true
 
@@ -260,7 +312,7 @@ namespace RMS.Controllers
 
 
                 }
-            }
+           
 
             return View(eqptissue);
 
@@ -269,6 +321,192 @@ namespace RMS.Controllers
 
 
         }
+
+
+
+
+
+
+
+        //public async Task<IActionResult> PrintV(string? id)
+        //{
+        //    var query = _context.Eqptissue
+        //                .Include(e => e.Eqpttype)
+        //                .Include(e => e.Branch)
+        //                .Include(e => e.Eqptcondition)
+        //                .Include(e => e.Status)
+        //                .AsQueryable();
+
+
+        //    query = query.Where(e => e.Issuevoucher == id);
+
+        //    var eqptIssues = query.ToList();
+
+
+        //    // Map data to the dynamic model
+        //    var model = new
+        //    {
+        //        ReportTitle = "Equipment Report",
+
+        //        EquipmentData = eqptIssues.Select(e => new
+        //        {
+        //            e.Id,
+        //            e.Date,
+        //            Branch = e.Branch?.Name,
+        //            Eqptname = e.Eqpttype?.Name,
+        //            e.Issueto,
+        //            e.Qty,
+        //            e.Issuevoucher,
+        //            Status = e.Status?.Name,
+        //            Condition = e.Eqptcondition?.Condition,
+        //            e.Details
+        //        }).ToList()
+        //    };
+
+
+
+        //    return new ViewAsPdf("~/Views/Reports/Singlevoucher.cshtml", model)
+        //    {
+        //        CustomSwitches = "--disable-smart-shrinking",
+        //        PageSize = Rotativa.AspNetCore.Options.Size.A4,
+        //        PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
+        //    };
+
+
+
+        //    // return Json(new { url = Url.Action("equipmentreport", "Reports") });
+        //}
+
+
+        public async Task<IActionResult> PrintV(string? id)
+        {
+            var query = _context.Eqptissue
+                        .Include(e => e.Eqpttype)
+                        .Include(e => e.Branch)
+                        .Include(e => e.Eqptcondition)
+                        .Include(e => e.Status)
+                        .AsQueryable();
+
+            query = query.Where(e => e.Issuevoucher == id);
+
+            var eqptIssues = query.ToList();
+
+            // Extracting relevant details for the header
+            var issue = eqptIssues.FirstOrDefault();
+            var model = new
+            {
+                
+                IVNo = issue?.Issuevoucher ?? "N/A",
+                RVNo = "", // Populate as needed
+                IssuingBranch = "IT Dte",
+                ReceivingBranch = issue?.Branch.Name ?? "N/A", // Modify as needed
+                DateIssue = issue?.Date?.ToString("dd-MMM-yyyy") ?? "N/A",
+
+                DateReceived = "", // Populate as needed
+                EquipmentData = eqptIssues.Select(e => new
+                {
+                    e.Id,
+                    e.Date,
+                    Branch = e.Branch?.Name,
+                    Eqptname = e.Eqpttype?.Name,
+                    e.Issueto,
+                    e.Qty,
+                    e.Issuevoucher,
+                    Status = e.Status?.Name,
+                    Condition = e.Eqptcondition?.Condition,
+                    e.Details
+                }).ToList()
+            };
+
+            return new ViewAsPdf("~/Views/Reports/Singlevoucher.cshtml", model)
+            {
+                CustomSwitches = "--disable-smart-shrinking",
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
+            };
+        }
+
+
+        // Eqptissue Print Data Submission
+
+        [HttpGet]
+        public IActionResult PrintEqpt(int Branchid, int EqptId, int Conditionid,int Statusid, DateTime Datefrom, DateTime Dateto)
+        {
+            var query = _context.Eqptissue
+                                .Include(e => e.Eqpttype)
+                                .Include(e => e.Branch)
+                                .Include(e => e.Eqptcondition)
+                                .Include(e => e.Status)
+                                .AsQueryable();
+
+            // Filter logic
+            if (Branchid != 0) query = query.Where(e => e.Branchid == Branchid);
+            if (EqptId != 0) query = query.Where(e => e.EqptId == EqptId);
+            if (Conditionid != 0) query = query.Where(e => e.Conditionid == Conditionid);
+            if (Statusid != 0) query = query.Where(e => e.StatusId == Statusid);
+            if (Datefrom != DateTime.MinValue && Dateto != DateTime.MinValue)
+                query = query.Where(e => e.Date >= Datefrom && e.Date <= Dateto);
+
+            var eqptIssues = query.ToList();
+
+            // Fallback to "All" if filters are empty
+            string branchName = Branchid == 0 ? "All" : _context.Branch.FirstOrDefault(b => b.Id == Branchid)?.Name ?? "Unknown";
+            string eqptName = EqptId == 0 ? "All" : _context.Eqpttype.FirstOrDefault(e => e.Id == EqptId)?.Name ?? "Unknown";
+            string statusName = Statusid == 0 ? "All" : _context.Status.FirstOrDefault(e => e.Id == Statusid)?.Name ?? "Unknown";
+            string conditionName = Conditionid == 0 ? "All" : _context.Eqptcondition.FirstOrDefault(c => c.Id == Conditionid)?.Condition ?? "Unknown";
+            string reportPeriod = Datefrom != DateTime.MinValue && Dateto != DateTime.MinValue
+                                  ? $"{Datefrom:dd-MMM-yyyy} to {Dateto:dd-MMM-yyyy}"
+                                  : "All Time";
+            int Totaleqpt = query.ToList().Count();
+
+            // Map data to the dynamic model
+            var model = new
+            {
+                ReportTitle = "Equipment Report",
+                BranchName = branchName,
+                EquipmentName = eqptName,
+                StatusName = statusName,
+                Totaleqpt = Totaleqpt,
+                ConditionName = conditionName,
+                ReportPeriod = reportPeriod,
+                EquipmentData = eqptIssues.Select(e => new
+                {
+                    e.Id,
+                    e.Date,
+                    Branch = e.Branch?.Name,
+                    Eqptname = e.Eqpttype?.Name,
+                    e.Issueto,
+                    e.Qty,
+                    e.Issuevoucher,
+                    Status = e.Status?.Name,
+                    Condition = e.Eqptcondition?.Condition,
+                    e.Details
+                }).ToList()
+            };
+            
+            //return View("~/Views/Reports/equipmentreport.cshtml", model);
+
+
+            return new ViewAsPdf("~/Views/Reports/equipmentreport.cshtml", model)
+            {
+                CustomSwitches = "--disable-smart-shrinking",
+                PageSize = Rotativa.AspNetCore.Options.Size.Legal,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
+            };
+
+
+
+            // return Json(new { url = Url.Action("equipmentreport", "Reports") });
+        }
+
+
+
+          // Eqptissue Print Data Submission
+
+
+
+
+
 
 
 
@@ -311,105 +549,6 @@ namespace RMS.Controllers
         private bool EqptissueExists(int id)
         {
             return _context.Eqptissue.Any(e => e.Id == id);
-        }
-
-
-
-
-
-
-        //[HttpPost]
-        //public IActionResult Add([FromBody] EquipmentIssueRequest request)
-        //{
-
-        //    //public async Task<IActionResult> SaveEquipmentIssues([FromBody] List<EqptissueVM> equipmentIssuesVM)
-        //    //{
-        //        if (request == null || !request.Any())
-        //        {
-        //            return BadRequest("No data provided.");
-        //        }
-
-        //        for (int i = 0; i < request.Count; i++)
-        //        {
-        //            var equipment = new EquipmentIssue
-        //            {
-        //                Date = equipmentIssuesVM[i].Date,
-        //                Branch = equipmentIssuesVM[i].Branch,
-        //                Eqpttypename = equipmentIssuesVM[i].Eqpttypename,
-        //                Eqptname = equipmentIssuesVM[i].Eqptname,
-        //                Qty = equipmentIssuesVM[i].Qty,
-        //                Issueto = equipmentIssuesVM[i].Issueto,
-        //                Condition = equipmentIssuesVM[i].Condition,
-        //                Issuevoucher = equipmentIssuesVM[i].Issuevoucher,
-        //                Details = equipmentIssuesVM[i].Details,
-        //                Active = equipmentIssuesVM[i].Active ?? true // Default to true
-        //            };
-
-        //            _context.EquipmentIssues.Add(equipment);
-        //        }
-
-        //        // Save all items in the database
-        //        await _context.SaveChangesAsync();
-
-        //        return Ok(new { message = "Data saved successfully!" });
-
-
-
-        //        return Ok(new { message = "Data saved successfully!" });
-        //}
-
-
-   
-        public async Task<IActionResult> Add([FromBody] EquipmentIssueRequest request)
-        {
-            if (request == null || request.Items == null || !request.Items.Any())
-            {
-                return BadRequest("Invalid or empty data.");
-            }
-
-            // Attempt to parse Date once for all items
-            DateTime parsedDate;
-            if (!DateTime.TryParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
-            {
-                return BadRequest("Invalid date format. Please use 'yyyy-MM-dd'.");
-            }
-
-
-            // Loop through each item and save it
-            foreach (var item in request.Items)
-            {
-                var Eqptissues = new Eqptissue // Assuming your entity name
-                {
-                    Date = parsedDate,               // Static value from parent
-                    Issuevoucher = request.Issuevoucher, // Static value from parent
-
-                    Branchid = int.TryParse(item.Branchid, out var branchId) ? branchId : (int?)null,
-                    Conditionid = int.TryParse(item.Conditionid, out var conditionId) ? conditionId : (int?)null,
-                    EqptId = int.TryParse(item.EqptId, out var eqptId) ? eqptId : (int?)null,
-
-                    Eqptname = item.Eqptname,
-                    Qty = int.TryParse(item.Qty, out var qty) ? qty : 0, // Convert to integer
-                    Issueto = item.Issueto,
-                    Details = item.Details,
-                    Active = true // Assuming Active flag
-                };
-
-                _context.Eqptissue.Add(Eqptissues);
-            }
-
-            // Save changes to the database
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Data saved successfully!" });
-        }
-
-
-
-        public async Task<IActionResult> PrintEqpt(EquipmrnPrintVM EPV)
-        {
-
-
-            return Ok(new { message = "Data saved successfully!" });
         }
 
     }

@@ -18,24 +18,24 @@
     <br/>
     <!-- Dropdown filters -->
     <div class="row mb-3">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label for="branchFilter" class="form-label">Select Branch:</label>
             <select id="branchFilter" class="form-control">
-                <option value="">All</option>
+                <option idval="" value="">All</option>
                 @foreach (var b in ViewBag.Branch)
                 {
-                    <option value="@b.Name">@b.Name</option>
+                    <option idval="@b.Id" value="@b.Name">@b.Name</option>
                 }
             </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label for="eqptFilter" class="form-label">Select Equipment:</label>
             <select id="eqptFilter" class="form-control">
-                <option value="">All</option>
+                <option idval="" value="">All</option>
                 @foreach (var eqpt in ViewBag.Eqpttype)
                 {
-                    <option value="@eqpt.Name">@eqpt.Name</option>
+                    <option idval="@eqpt.Id" value="@eqpt.Name">@eqpt.Name</option>
                 }
             </select>
         </div>   
@@ -43,10 +43,21 @@
         <div class="col-md-2">
             <label for="eqptcond" class="form-label">Select Condition:</label>
             <select id="eqptcond" class="form-control">
-                <option value="">All</option>
+                <option idval="" value="">All</option>
                 @foreach (var cond in ViewBag.Eqptconditions)
                 {
-                    <option value="@cond.Condition">@cond.Condition</option>
+                    <option idval="@cond.Id" value="@cond.Condition">@cond.Condition</option>
+                }
+            </select>
+        </div>
+        
+        <div class="col-md-2">
+            <label for="eqptstatus" class="form-label">Select Status:</label>
+            <select id="eqptstatus" class="form-control">
+                <option idval="" value="">All</option>
+                @foreach (var status in ViewBag.Status)
+                {
+                    <option idval="@status.Id" value="@status.Name">@status.Name</option>
                 }
             </select>
         </div>  
@@ -86,6 +97,7 @@
                     <th>Eqpt Name</th>
                     <th>Qty</th>
                     <th>Condition</th>
+                    <th>Status</th>
                     <th>Issue To</th>
                     <th>I/Voucher</th>
                     <th>Date</th>
@@ -107,6 +119,7 @@
                         <td>@item.Eqptname</td> 
                         <td>@item.Qty</td>
                         <td>@item.Condition</td>
+                        <td>@item.Status</td>
                         <td>@item.Issueto</td>
                         <td>@item.Issuevoucher</td>
                         <td>@item.Date?.ToString("dd-MMM-yyyy")</td>
@@ -117,7 +130,7 @@
                             @if (role != "Officer")
                             {
                                 <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.Id">✏️</a>
-                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">🗑️</a>
+                                <a class="btn btn-danger btn-sm" asp-action="PrintV" asp-route-id="@item.Issuevoucher">🖨️</a>
                             }
                           
                           

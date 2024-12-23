@@ -16,7 +16,7 @@
 
                         <div class="row">
                             <!-- Left column (first set of form fields) -->
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
                                     <label asp-for="Date" class="form-label">Date</label>
@@ -28,7 +28,7 @@
 
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
                                     <label for="EqptId" class="form-label">Equipment</label>
@@ -52,7 +52,33 @@
 
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
+
+                                <div class="mb-3">
+                                    <label for="EqptId" class="form-label">Status</label>
+                                    <select class="form-control eqptstatusId" name="statusid" required>
+                                        <option>Select</option>
+                                        @foreach (var eqptstatus in ViewBag.Status)
+                                        {
+                                            if (eqptstatus.Id == Model.StatusId)
+                                            {
+                                                <option value="@eqptstatus.Id" selected="selected">@eqptstatus.Name</option>
+                                         
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@eqptstatus.Id">@eqptstatus.Name </option>
+                                            
+                                        }
+                                        }
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
                                     <label asp-for="Eqptname" class="form-label">Equipment Name</label>
@@ -61,7 +87,7 @@
 
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
                                     <label asp-for="Qty" class="form-label">Quantity</label>
@@ -71,7 +97,7 @@
                             </div>
 
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
                                     <label for="branchid" class="form-label">Branch</label>
@@ -98,7 +124,7 @@
 
 
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
 
@@ -128,7 +154,7 @@
 
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
 
@@ -142,7 +168,7 @@
                             </div>
 
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
 
                                 <div class="mb-3">
 

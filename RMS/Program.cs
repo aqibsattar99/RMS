@@ -1,5 +1,7 @@
 using RMS.Models;
+
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +9,7 @@ builder.Services.AddControllersWithViews();
 
 // To Get the Session Data Been Sent to Whole Website
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
 // Add session service
 builder.Services.AddSession(options =>
@@ -46,6 +49,6 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Eqptissue}/{action=create}/{id?}");
-
+    pattern: "{controller=Home}/{action=index}/{id?}");
+app.UseRotativa();
 app.Run();
